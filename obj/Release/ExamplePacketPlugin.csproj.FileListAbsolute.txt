@@ -1,0 +1,16 @@
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\bin\Release\ExamplePacketPlugin.dll
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\bin\Release\ExamplePacketPlugin.pdb
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.csprojResolveAssemblyReference.cache
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.Main.resources
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.csproj.GenerateResource.Cache
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.csproj.CoreCompileInputs.cache
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.dll
+A:\Code\Projects\Bitbucket\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.pdb
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\bin\Release\ExamplePacketPlugin.dll
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\bin\Release\ExamplePacketPlugin.pdb
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.csprojResolveAssemblyReference.cache
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.Main.resources
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.csproj.GenerateResource.Cache
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.csproj.CoreCompileInputs.cache
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.dll
+A:\Code\Projects\GitHub\Grimoire\ExamplePacketPlugin\obj\Release\ExamplePacketPlugin.pdb
