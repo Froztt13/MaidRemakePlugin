@@ -31,29 +31,33 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.trgtUsrnmLabel = new System.Windows.Forms.Label();
-            this.tbGotoUsername = new System.Windows.Forms.TextBox();
             this.cbEnablePlugin = new System.Windows.Forms.CheckBox();
             this.tbSkillList = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cbStopIf = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.gbOptions = new System.Windows.Forms.GroupBox();
+            this.cmbPreset = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.cbStopIf = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numRelogDelay = new System.Windows.Forms.NumericUpDown();
             this.cbLockCell = new System.Windows.Forms.CheckBox();
             this.cbStopAttack = new System.Windows.Forms.CheckBox();
             this.cbEnableGlobalHotkey = new System.Windows.Forms.CheckBox();
             this.gbAdvancedOptions = new System.Windows.Forms.GroupBox();
+            this.numHealthPercent = new System.Windows.Forms.NumericUpDown();
+            this.lbUseHeal2 = new System.Windows.Forms.Label();
+            this.tbHealSkill = new System.Windows.Forms.TextBox();
+            this.cbUseHeal = new System.Windows.Forms.CheckBox();
             this.tbAttPriority = new System.Windows.Forms.TextBox();
             this.cbAttackPriority = new System.Windows.Forms.CheckBox();
             this.tbBuffSkill = new System.Windows.Forms.TextBox();
             this.cbBuffIfStop = new System.Windows.Forms.CheckBox();
-            this.cbChangeColor = new System.Windows.Forms.CheckBox();
             this.timerStopAttack = new System.Windows.Forms.Timer(this.components);
-            this.groupBox1.SuspendLayout();
+            this.cmbGotoUsername = new System.Windows.Forms.ComboBox();
+            this.gbOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRelogDelay)).BeginInit();
             this.gbAdvancedOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numHealthPercent)).BeginInit();
             this.SuspendLayout();
             // 
             // trgtUsrnmLabel
@@ -64,15 +68,6 @@
             this.trgtUsrnmLabel.Size = new System.Drawing.Size(84, 13);
             this.trgtUsrnmLabel.TabIndex = 4;
             this.trgtUsrnmLabel.Text = "Goto Username:";
-            // 
-            // tbGotoUsername
-            // 
-            this.tbGotoUsername.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbGotoUsername.Location = new System.Drawing.Point(19, 30);
-            this.tbGotoUsername.Name = "tbGotoUsername";
-            this.tbGotoUsername.Size = new System.Drawing.Size(135, 20);
-            this.tbGotoUsername.TabIndex = 5;
-            this.tbGotoUsername.Text = "username";
             // 
             // cbEnablePlugin
             // 
@@ -103,19 +98,44 @@
             this.label4.TabIndex = 13;
             this.label4.Text = "Skill List:";
             // 
-            // groupBox1
+            // gbOptions
             // 
-            this.groupBox1.Controls.Add(this.cbStopIf);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.numRelogDelay);
-            this.groupBox1.Location = new System.Drawing.Point(166, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(164, 109);
-            this.groupBox1.TabIndex = 15;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Options";
+            this.gbOptions.Controls.Add(this.cmbPreset);
+            this.gbOptions.Controls.Add(this.label2);
+            this.gbOptions.Controls.Add(this.cbStopIf);
+            this.gbOptions.Controls.Add(this.label1);
+            this.gbOptions.Controls.Add(this.numRelogDelay);
+            this.gbOptions.Location = new System.Drawing.Point(166, 12);
+            this.gbOptions.Name = "gbOptions";
+            this.gbOptions.Size = new System.Drawing.Size(164, 101);
+            this.gbOptions.TabIndex = 15;
+            this.gbOptions.TabStop = false;
+            this.gbOptions.Text = "Options";
+            // 
+            // cmbPreset
+            // 
+            this.cmbPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPreset.FormattingEnabled = true;
+            this.cmbPreset.Items.AddRange(new object[] {
+            "LR",
+            "LC",
+            "LOO",
+            "SC",
+            "AP"});
+            this.cmbPreset.Location = new System.Drawing.Point(86, 67);
+            this.cmbPreset.Name = "cmbPreset";
+            this.cmbPreset.Size = new System.Drawing.Size(68, 21);
+            this.cmbPreset.TabIndex = 21;
+            this.cmbPreset.SelectedIndexChanged += new System.EventHandler(this.cmbPreset_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(83, 51);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(62, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Skill Preset:";
             // 
             // cbStopIf
             // 
@@ -127,43 +147,25 @@
             this.cbStopIf.Text = "Stop if failed goto 5 times";
             this.cbStopIf.UseVisualStyleBackColor = true;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(122, 53);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(20, 13);
-            this.label3.TabIndex = 18;
-            this.label3.Text = "ms";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(48, 74);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 13);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "(after relogin)";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 53);
+            this.label1.Location = new System.Drawing.Point(11, 51);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.Size = new System.Drawing.Size(68, 13);
             this.label1.TabIndex = 16;
-            this.label1.Text = "Delay:";
+            this.label1.Text = "Relog Delay:";
             // 
             // numRelogDelay
             // 
-            this.numRelogDelay.Location = new System.Drawing.Point(51, 51);
+            this.numRelogDelay.Location = new System.Drawing.Point(14, 67);
             this.numRelogDelay.Maximum = new decimal(new int[] {
             60000,
             0,
             0,
             0});
             this.numRelogDelay.Name = "numRelogDelay";
-            this.numRelogDelay.Size = new System.Drawing.Size(65, 20);
+            this.numRelogDelay.Size = new System.Drawing.Size(62, 20);
             this.numRelogDelay.TabIndex = 15;
             this.numRelogDelay.Value = new decimal(new int[] {
             5000,
@@ -206,11 +208,14 @@
             // 
             // gbAdvancedOptions
             // 
+            this.gbAdvancedOptions.Controls.Add(this.numHealthPercent);
+            this.gbAdvancedOptions.Controls.Add(this.lbUseHeal2);
+            this.gbAdvancedOptions.Controls.Add(this.tbHealSkill);
+            this.gbAdvancedOptions.Controls.Add(this.cbUseHeal);
             this.gbAdvancedOptions.Controls.Add(this.tbAttPriority);
             this.gbAdvancedOptions.Controls.Add(this.cbAttackPriority);
             this.gbAdvancedOptions.Controls.Add(this.tbBuffSkill);
             this.gbAdvancedOptions.Controls.Add(this.cbBuffIfStop);
-            this.gbAdvancedOptions.Controls.Add(this.cbChangeColor);
             this.gbAdvancedOptions.Controls.Add(this.cbEnableGlobalHotkey);
             this.gbAdvancedOptions.Controls.Add(this.cbStopAttack);
             this.gbAdvancedOptions.Controls.Add(this.cbLockCell);
@@ -220,6 +225,57 @@
             this.gbAdvancedOptions.TabIndex = 19;
             this.gbAdvancedOptions.TabStop = false;
             this.gbAdvancedOptions.Text = "Advanced Options";
+            // 
+            // numHealthPercent
+            // 
+            this.numHealthPercent.Location = new System.Drawing.Point(122, 40);
+            this.numHealthPercent.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.numHealthPercent.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numHealthPercent.Name = "numHealthPercent";
+            this.numHealthPercent.Size = new System.Drawing.Size(32, 20);
+            this.numHealthPercent.TabIndex = 27;
+            this.numHealthPercent.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // lbUseHeal2
+            // 
+            this.lbUseHeal2.AutoSize = true;
+            this.lbUseHeal2.Location = new System.Drawing.Point(73, 43);
+            this.lbUseHeal2.Name = "lbUseHeal2";
+            this.lbUseHeal2.Size = new System.Drawing.Size(50, 13);
+            this.lbUseHeal2.TabIndex = 26;
+            this.lbUseHeal2.Text = "if health<";
+            // 
+            // tbHealSkill
+            // 
+            this.tbHealSkill.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbHealSkill.Location = new System.Drawing.Point(47, 40);
+            this.tbHealSkill.Name = "tbHealSkill";
+            this.tbHealSkill.Size = new System.Drawing.Size(25, 20);
+            this.tbHealSkill.TabIndex = 25;
+            this.tbHealSkill.Text = "1,2";
+            // 
+            // cbUseHeal
+            // 
+            this.cbUseHeal.AutoSize = true;
+            this.cbUseHeal.Location = new System.Drawing.Point(7, 42);
+            this.cbUseHeal.Name = "cbUseHeal";
+            this.cbUseHeal.Size = new System.Drawing.Size(45, 17);
+            this.cbUseHeal.TabIndex = 24;
+            this.cbUseHeal.Text = "Use";
+            this.cbUseHeal.UseVisualStyleBackColor = true;
+            this.cbUseHeal.CheckedChanged += new System.EventHandler(this.cbUseHeal_CheckedChanged);
             // 
             // tbAttPriority
             // 
@@ -248,7 +304,7 @@
             this.tbBuffSkill.Name = "tbBuffSkill";
             this.tbBuffSkill.Size = new System.Drawing.Size(40, 20);
             this.tbBuffSkill.TabIndex = 21;
-            this.tbBuffSkill.Text = "3,4";
+            this.tbBuffSkill.Text = "2,3";
             // 
             // cbBuffIfStop
             // 
@@ -261,46 +317,46 @@
             this.cbBuffIfStop.UseVisualStyleBackColor = true;
             this.cbBuffIfStop.CheckedChanged += new System.EventHandler(this.cbBuffIfStop_CheckedChanged);
             // 
-            // cbChangeColor
-            // 
-            this.cbChangeColor.AutoSize = true;
-            this.cbChangeColor.Checked = true;
-            this.cbChangeColor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbChangeColor.Location = new System.Drawing.Point(7, 42);
-            this.cbChangeColor.Name = "cbChangeColor";
-            this.cbChangeColor.Size = new System.Drawing.Size(154, 17);
-            this.cbChangeColor.TabIndex = 19;
-            this.cbChangeColor.Text = "Change Color if StopAttack";
-            this.cbChangeColor.UseVisualStyleBackColor = true;
-            // 
             // timerStopAttack
             // 
             this.timerStopAttack.Tick += new System.EventHandler(this.timerStopAttack_Tick);
+            // 
+            // cmbGotoUsername
+            // 
+            this.cmbGotoUsername.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbGotoUsername.FormattingEnabled = true;
+            this.cmbGotoUsername.Location = new System.Drawing.Point(19, 30);
+            this.cmbGotoUsername.Name = "cmbGotoUsername";
+            this.cmbGotoUsername.Size = new System.Drawing.Size(135, 21);
+            this.cmbGotoUsername.TabIndex = 20;
+            this.cmbGotoUsername.Text = "username";
+            this.cmbGotoUsername.Click += new System.EventHandler(this.cmbGotoUsername_Clicked);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 234);
+            this.ClientSize = new System.Drawing.Size(342, 232);
+            this.Controls.Add(this.cmbGotoUsername);
             this.Controls.Add(this.gbAdvancedOptions);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbOptions);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tbSkillList);
             this.Controls.Add(this.cbEnablePlugin);
-            this.Controls.Add(this.tbGotoUsername);
             this.Controls.Add(this.trgtUsrnmLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Maid Remake";
+            this.Text = "Maid Remake 2.0";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbOptions.ResumeLayout(false);
+            this.gbOptions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRelogDelay)).EndInit();
             this.gbAdvancedOptions.ResumeLayout(false);
             this.gbAdvancedOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numHealthPercent)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -308,25 +364,28 @@
 
         #endregion
         private System.Windows.Forms.Label trgtUsrnmLabel;
-        private System.Windows.Forms.TextBox tbGotoUsername;
         private System.Windows.Forms.CheckBox cbEnablePlugin;
-        private System.Windows.Forms.TextBox tbSkillList;
+        internal System.Windows.Forms.TextBox tbSkillList;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbOptions;
         private System.Windows.Forms.CheckBox cbStopIf;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numRelogDelay;
         private System.Windows.Forms.CheckBox cbLockCell;
         private System.Windows.Forms.CheckBox cbStopAttack;
         private System.Windows.Forms.CheckBox cbEnableGlobalHotkey;
         private System.Windows.Forms.GroupBox gbAdvancedOptions;
-        private System.Windows.Forms.CheckBox cbChangeColor;
-        private System.Windows.Forms.TextBox tbBuffSkill;
-        private System.Windows.Forms.CheckBox cbBuffIfStop;
+        internal System.Windows.Forms.TextBox tbBuffSkill;
+        internal System.Windows.Forms.CheckBox cbBuffIfStop;
         private System.Windows.Forms.TextBox tbAttPriority;
         private System.Windows.Forms.CheckBox cbAttackPriority;
         private System.Windows.Forms.Timer timerStopAttack;
+        internal System.Windows.Forms.CheckBox cbUseHeal;
+        internal System.Windows.Forms.TextBox tbHealSkill;
+        internal System.Windows.Forms.NumericUpDown numHealthPercent;
+        private System.Windows.Forms.Label lbUseHeal2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbPreset;
+        private System.Windows.Forms.Label label2;
+        internal System.Windows.Forms.ComboBox cmbGotoUsername;
     }
 }

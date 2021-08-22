@@ -25,7 +25,6 @@ namespace ExamplePacketPlugin
         public void Unload() // In this method you need to clean everything up
         {
             Proxy.Instance.UnregisterHandler(Main.Instance.CJHandler);
-            Proxy.Instance.UnregisterHandler(Main.Instance.loggedInHandler);
             menuItem.Click -= MenuStripItem_Click;
             Grimoire.UI.Root.Instance.MenuMain.Items.Remove(menuItem);
             Main.Instance.Dispose();

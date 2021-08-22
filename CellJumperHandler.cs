@@ -12,7 +12,7 @@ namespace ExamplePacketPlugin
     {
         public string[] HandledCommands { get; } = { "uotls" };
 
-        public string targetUsername;
+        public string targetUsername => Main.Instance.cmbGotoUsername.Text.ToLower();
 
         public void Handle(XtMessage message)
         {
