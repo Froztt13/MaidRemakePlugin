@@ -68,11 +68,11 @@ namespace ExamplePacketPlugin
                     {
                         // while player is logout -> do delay (2s), wait first join, do first join delay
                         if (!Player.IsLoggedIn)
-                        {
                             await waitForFirstJoin();
-                            if (!cbEnablePlugin.Checked)
-                                return;
-                        }
+
+                        // plugin disabled
+                        if (!cbEnablePlugin.Checked)
+                            return;
 
                         // starting the plugin
                         if (IsPlayerInMap(targetUsername) || cbLockCell.Checked)
@@ -82,7 +82,6 @@ namespace ExamplePacketPlugin
                             if (!Player.IsAlive)
                             {
                                 World.SetSpawnPoint();
-
                                 await Task.Delay(500);
                                 continue;
                             }
