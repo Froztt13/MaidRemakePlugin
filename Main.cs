@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Grimoire.Game;
 using Grimoire.Networking;
+using DarkUI.Forms;
 
 namespace ExamplePacketPlugin
 {
-    public partial class Main : Form
+    public partial class Main : DarkForm
     {
         public static Main Instance { get; } = new Main();
 
@@ -59,7 +60,7 @@ namespace ExamplePacketPlugin
                 string[] skillList = tbSkillList.Text.Split(',');
                 int skillIndex = 0;
 
-                if (!cbLockCell.Checked)
+                if (!cbUnfollow.Checked)
                     Proxy.Instance.RegisterHandler(CJHandler);
 
                 while(cbEnablePlugin.Checked)
@@ -75,7 +76,7 @@ namespace ExamplePacketPlugin
                             return;
 
                         // starting the plugin
-                        if (IsPlayerInMap(targetUsername) || cbLockCell.Checked)
+                        if (IsPlayerInMap(targetUsername) || cbUnfollow.Checked)
                         {
                             gotoTry = 0;
 
@@ -260,7 +261,7 @@ namespace ExamplePacketPlugin
             {
                 // LockCell: R
                 e.SuppressKeyPress = true;
-                cbLockCell.Checked = cbLockCell.Checked ? false : true;
+                cbUnfollow.Checked = cbUnfollow.Checked ? false : true;
             }
             else if (e.KeyCode == Keys.T)
             {
@@ -277,7 +278,7 @@ namespace ExamplePacketPlugin
             if (e == Keys.R)
             {
                 // LockCell: R
-                cbLockCell.Checked = cbLockCell.Checked ? false : true;
+                cbUnfollow.Checked = cbUnfollow.Checked ? false : true;
             }
             else if (e == Keys.T)
             {
@@ -290,7 +291,7 @@ namespace ExamplePacketPlugin
 
         private void cbLockCell_CheckedChanged(object sender, EventArgs e)
         {
-            if(cbLockCell.Checked)
+            if(cbUnfollow.Checked)
                 Proxy.Instance.UnregisterHandler(CJHandler);
             else
                 Proxy.Instance.RegisterHandler(CJHandler);
@@ -300,6 +301,7 @@ namespace ExamplePacketPlugin
         {
             if (cbStopAttack.Checked)
             {
+                lbStopAttackBg.BackColor = System.Drawing.Color.DeepPink;
                 stopwatch.Reset();
                 stopwatch.Start();
                 timerStopAttack.Enabled = true;
@@ -310,6 +312,7 @@ namespace ExamplePacketPlugin
             }
             else
             {
+                lbStopAttackBg.BackColor = System.Drawing.Color.Transparent;
                 stopwatch.Stop();
                 this.Text = "Maid Remake";
                 timerStopAttack.Enabled = false;
@@ -383,6 +386,9 @@ namespace ExamplePacketPlugin
                     break;
                 case "AP":
                     ClassPreset.AP();
+                    break;
+                case "CCM":
+                    ClassPreset.CCM();
                     break;
             }
             ClassPreset.cbSet();

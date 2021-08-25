@@ -73,6 +73,19 @@ namespace ExamplePacketPlugin
             Main.Instance.tbBuffSkill.Text = String.Empty;
         }
 
+        public static void CCM()
+        {
+            // skill list
+            Main.Instance.tbSkillList.Text = "1,4";
+
+            // heal skill
+            Main.Instance.tbHealSkill.Text = "2";
+            Main.Instance.numHealthPercent.Value = 75;
+
+            // buff skill
+            Main.Instance.tbBuffSkill.Text = String.Empty;
+        }
+
         // for making sure the setting is applied
 
         public static void cbClear()
