@@ -55,6 +55,7 @@
             this.lbStopAttackBg = new System.Windows.Forms.Label();
             this.timerStopAttack = new System.Windows.Forms.Timer(this.components);
             this.cmbGotoUsername = new System.Windows.Forms.ComboBox();
+            this.cbWaitSkill = new DarkUI.Controls.DarkCheckBox();
             this.gbOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRelogDelay)).BeginInit();
             this.gbAdvancedOptions.SuspendLayout();
@@ -74,11 +75,12 @@
             // cbEnablePlugin
             // 
             this.cbEnablePlugin.AutoSize = true;
+            this.cbEnablePlugin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbEnablePlugin.Location = new System.Drawing.Point(19, 96);
             this.cbEnablePlugin.Name = "cbEnablePlugin";
-            this.cbEnablePlugin.Size = new System.Drawing.Size(91, 17);
+            this.cbEnablePlugin.Size = new System.Drawing.Size(65, 17);
             this.cbEnablePlugin.TabIndex = 7;
-            this.cbEnablePlugin.Text = "Enable Plugin";
+            this.cbEnablePlugin.Text = "Enable";
             this.cbEnablePlugin.CheckedChanged += new System.EventHandler(this.cbEnablePlugin_CheckedChanged);
             // 
             // tbSkillList
@@ -123,7 +125,10 @@
             "LOO",
             "SC",
             "AP",
-            "CCM"});
+            "CCMD",
+            "SSOT",
+            "NCM",
+            "TK"});
             this.cmbPreset.Location = new System.Drawing.Point(86, 67);
             this.cmbPreset.Name = "cmbPreset";
             this.cmbPreset.Size = new System.Drawing.Size(68, 21);
@@ -357,11 +362,21 @@
             this.cmbGotoUsername.Text = "username";
             this.cmbGotoUsername.Click += new System.EventHandler(this.cmbGotoUsername_Clicked);
             // 
+            // cbWaitSkill
+            // 
+            this.cbWaitSkill.AutoSize = true;
+            this.cbWaitSkill.Location = new System.Drawing.Point(82, 96);
+            this.cbWaitSkill.Name = "cbWaitSkill";
+            this.cbWaitSkill.Size = new System.Drawing.Size(70, 17);
+            this.cbWaitSkill.TabIndex = 21;
+            this.cbWaitSkill.Text = "Wait Skill";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(342, 232);
+            this.Controls.Add(this.cbWaitSkill);
             this.Controls.Add(this.cmbGotoUsername);
             this.Controls.Add(this.gbAdvancedOptions);
             this.Controls.Add(this.gbOptions);
@@ -373,7 +388,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Maid Remake 3.0";
+            this.Text = "Maid Remake 4.0";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.gbOptions.ResumeLayout(false);
@@ -413,5 +428,6 @@
         private DarkUI.Controls.DarkComboBox cmbPreset;
         private DarkUI.Controls.DarkLabel label2;
         private System.Windows.Forms.Label lbStopAttackBg;
+        internal DarkUI.Controls.DarkCheckBox cbWaitSkill;
     }
 }

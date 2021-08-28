@@ -82,6 +82,7 @@ namespace ExamplePacketPlugin
 
                             if (!Player.IsAlive)
                             {
+                                skillIndex = 0;
                                 World.SetSpawnPoint();
                                 await Task.Delay(500);
                                 continue;
@@ -122,6 +123,12 @@ namespace ExamplePacketPlugin
 
                             if (!Player.HasTarget)
                                 Player.AttackMonster("*");
+
+                            if (cbWaitSkill.Checked && (Player.SkillAvailable(skillList[skillIndex]) > 0 || !Player.HasTarget))
+                            {
+                                await Task.Delay(150);
+                                continue;
+                            }
 
                             Player.UseSkill(skillList[skillIndex]);
                             skillIndex++;
@@ -387,8 +394,17 @@ namespace ExamplePacketPlugin
                 case "AP":
                     ClassPreset.AP();
                     break;
-                case "CCM":
-                    ClassPreset.CCM();
+                case "CCMD":
+                    ClassPreset.CCMD();
+                    break;
+                case "SSOT":
+                    ClassPreset.SSOT();
+                    break;
+                case "NCM":
+                    ClassPreset.NCM();
+                    break;
+                case "TK":
+                    ClassPreset.TK();
                     break;
             }
             ClassPreset.cbSet();
