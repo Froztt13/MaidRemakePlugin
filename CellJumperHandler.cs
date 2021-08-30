@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamplePacketPlugin
+namespace MaidRemake
 {
     public class CellJumperHandler : IXtMessageHandler
     {
         public string[] HandledCommands { get; } = { "uotls" };
 
-        public string targetUsername => Main.Instance.cmbGotoUsername.Text.ToLower();
+        public string targetUsername => MaidRemake.Instance.cmbGotoUsername.Text.ToLower();
 
         public void Handle(XtMessage message)
         {
@@ -63,7 +63,7 @@ namespace ExamplePacketPlugin
             }
 
 
-            if (isStrPad && (currUsername == targetUsername))
+            if (isStrPad && (currUsername == targetUsername) && !World.IsMapLoading)
             {
                 Player.MoveToCell(curr_cell, curr_pad);
             }

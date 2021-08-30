@@ -1,6 +1,6 @@
-﻿namespace ExamplePacketPlugin
+﻿namespace MaidRemake
 {
-    partial class Main
+    partial class MaidRemake
     {
         /// <summary>
         /// Required designer variable.
@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MaidRemake));
             this.trgtUsrnmLabel = new DarkUI.Controls.DarkLabel();
             this.cbEnablePlugin = new DarkUI.Controls.DarkCheckBox();
             this.tbSkillList = new DarkUI.Controls.DarkTextBox();
             this.label4 = new DarkUI.Controls.DarkLabel();
             this.gbOptions = new DarkUI.Controls.DarkGroupBox();
+            this.lblLockedMapSetting = new System.Windows.Forms.LinkLabel();
+            this.cbHandleLockedMap = new DarkUI.Controls.DarkCheckBox();
             this.cmbPreset = new DarkUI.Controls.DarkComboBox();
             this.label2 = new DarkUI.Controls.DarkLabel();
             this.cbStopIf = new DarkUI.Controls.DarkCheckBox();
@@ -56,17 +58,20 @@
             this.timerStopAttack = new System.Windows.Forms.Timer(this.components);
             this.cmbGotoUsername = new System.Windows.Forms.ComboBox();
             this.cbWaitSkill = new DarkUI.Controls.DarkCheckBox();
+            this.numSkillDelay = new DarkUI.Controls.DarkNumericUpDown();
+            this.darkLabel1 = new DarkUI.Controls.DarkLabel();
             this.gbOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRelogDelay)).BeginInit();
             this.gbAdvancedOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numHealthPercent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSkillDelay)).BeginInit();
             this.SuspendLayout();
             // 
             // trgtUsrnmLabel
             // 
             this.trgtUsrnmLabel.AutoSize = true;
             this.trgtUsrnmLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.trgtUsrnmLabel.Location = new System.Drawing.Point(16, 14);
+            this.trgtUsrnmLabel.Location = new System.Drawing.Point(16, 12);
             this.trgtUsrnmLabel.Name = "trgtUsrnmLabel";
             this.trgtUsrnmLabel.Size = new System.Drawing.Size(84, 13);
             this.trgtUsrnmLabel.TabIndex = 4;
@@ -76,7 +81,7 @@
             // 
             this.cbEnablePlugin.AutoSize = true;
             this.cbEnablePlugin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbEnablePlugin.Location = new System.Drawing.Point(19, 96);
+            this.cbEnablePlugin.Location = new System.Drawing.Point(19, 94);
             this.cbEnablePlugin.Name = "cbEnablePlugin";
             this.cbEnablePlugin.Size = new System.Drawing.Size(65, 17);
             this.cbEnablePlugin.TabIndex = 7;
@@ -86,7 +91,7 @@
             // tbSkillList
             // 
             this.tbSkillList.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSkillList.Location = new System.Drawing.Point(19, 70);
+            this.tbSkillList.Location = new System.Drawing.Point(19, 68);
             this.tbSkillList.Name = "tbSkillList";
             this.tbSkillList.Size = new System.Drawing.Size(135, 20);
             this.tbSkillList.TabIndex = 12;
@@ -96,7 +101,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.label4.Location = new System.Drawing.Point(16, 54);
+            this.label4.Location = new System.Drawing.Point(16, 52);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 13);
             this.label4.TabIndex = 13;
@@ -104,6 +109,8 @@
             // 
             // gbOptions
             // 
+            this.gbOptions.Controls.Add(this.lblLockedMapSetting);
+            this.gbOptions.Controls.Add(this.cbHandleLockedMap);
             this.gbOptions.Controls.Add(this.cmbPreset);
             this.gbOptions.Controls.Add(this.label2);
             this.gbOptions.Controls.Add(this.cbStopIf);
@@ -111,10 +118,30 @@
             this.gbOptions.Controls.Add(this.numRelogDelay);
             this.gbOptions.Location = new System.Drawing.Point(166, 12);
             this.gbOptions.Name = "gbOptions";
-            this.gbOptions.Size = new System.Drawing.Size(164, 101);
+            this.gbOptions.Size = new System.Drawing.Size(164, 127);
             this.gbOptions.TabIndex = 15;
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
+            // 
+            // lblLockedMapSetting
+            // 
+            this.lblLockedMapSetting.AutoSize = true;
+            this.lblLockedMapSetting.LinkColor = System.Drawing.Color.DeepSkyBlue;
+            this.lblLockedMapSetting.Location = new System.Drawing.Point(30, 49);
+            this.lblLockedMapSetting.Name = "lblLockedMapSetting";
+            this.lblLockedMapSetting.Size = new System.Drawing.Size(111, 13);
+            this.lblLockedMapSetting.TabIndex = 23;
+            this.lblLockedMapSetting.TabStop = true;
+            this.lblLockedMapSetting.Text = "Locked Zone Handler";
+            this.lblLockedMapSetting.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblLockedMapSetting_LinkClicked);
+            // 
+            // cbHandleLockedMap
+            // 
+            this.cbHandleLockedMap.AutoSize = true;
+            this.cbHandleLockedMap.Location = new System.Drawing.Point(14, 48);
+            this.cbHandleLockedMap.Name = "cbHandleLockedMap";
+            this.cbHandleLockedMap.Size = new System.Drawing.Size(15, 14);
+            this.cbHandleLockedMap.TabIndex = 22;
             // 
             // cmbPreset
             // 
@@ -129,7 +156,7 @@
             "SSOT",
             "NCM",
             "TK"});
-            this.cmbPreset.Location = new System.Drawing.Point(86, 67);
+            this.cmbPreset.Location = new System.Drawing.Point(86, 91);
             this.cmbPreset.Name = "cmbPreset";
             this.cmbPreset.Size = new System.Drawing.Size(68, 21);
             this.cmbPreset.TabIndex = 21;
@@ -139,7 +166,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.label2.Location = new System.Drawing.Point(83, 51);
+            this.label2.Location = new System.Drawing.Point(83, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 13);
             this.label2.TabIndex = 20;
@@ -158,7 +185,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.label1.Location = new System.Drawing.Point(11, 51);
+            this.label1.Location = new System.Drawing.Point(11, 75);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(68, 13);
             this.label1.TabIndex = 16;
@@ -171,7 +198,7 @@
             0,
             0,
             65536});
-            this.numRelogDelay.Location = new System.Drawing.Point(14, 67);
+            this.numRelogDelay.Location = new System.Drawing.Point(14, 91);
             this.numRelogDelay.LoopValues = false;
             this.numRelogDelay.Maximum = new decimal(new int[] {
             60000,
@@ -231,7 +258,7 @@
             this.gbAdvancedOptions.Controls.Add(this.cbStopAttack);
             this.gbAdvancedOptions.Controls.Add(this.cbUnfollow);
             this.gbAdvancedOptions.Controls.Add(this.lbStopAttackBg);
-            this.gbAdvancedOptions.Location = new System.Drawing.Point(12, 130);
+            this.gbAdvancedOptions.Location = new System.Drawing.Point(12, 153);
             this.gbAdvancedOptions.Name = "gbAdvancedOptions";
             this.gbAdvancedOptions.Size = new System.Drawing.Size(318, 92);
             this.gbAdvancedOptions.TabIndex = 19;
@@ -355,7 +382,7 @@
             this.cmbGotoUsername.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbGotoUsername.ForeColor = this.tbSkillList.ForeColor;
             this.cmbGotoUsername.FormattingEnabled = true;
-            this.cmbGotoUsername.Location = new System.Drawing.Point(19, 30);
+            this.cmbGotoUsername.Location = new System.Drawing.Point(19, 28);
             this.cmbGotoUsername.Name = "cmbGotoUsername";
             this.cmbGotoUsername.Size = new System.Drawing.Size(135, 21);
             this.cmbGotoUsername.TabIndex = 20;
@@ -365,17 +392,57 @@
             // cbWaitSkill
             // 
             this.cbWaitSkill.AutoSize = true;
-            this.cbWaitSkill.Location = new System.Drawing.Point(82, 96);
+            this.cbWaitSkill.Location = new System.Drawing.Point(84, 94);
             this.cbWaitSkill.Name = "cbWaitSkill";
             this.cbWaitSkill.Size = new System.Drawing.Size(70, 17);
             this.cbWaitSkill.TabIndex = 21;
             this.cbWaitSkill.Text = "Wait Skill";
             // 
-            // Main
+            // numSkillDelay
+            // 
+            this.numSkillDelay.IncrementAlternate = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.numSkillDelay.Location = new System.Drawing.Point(84, 117);
+            this.numSkillDelay.LoopValues = false;
+            this.numSkillDelay.Maximum = new decimal(new int[] {
+            60000,
+            0,
+            0,
+            0});
+            this.numSkillDelay.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numSkillDelay.Name = "numSkillDelay";
+            this.numSkillDelay.Size = new System.Drawing.Size(70, 20);
+            this.numSkillDelay.TabIndex = 22;
+            this.numSkillDelay.Value = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+            // 
+            // darkLabel1
+            // 
+            this.darkLabel1.AutoSize = true;
+            this.darkLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel1.Location = new System.Drawing.Point(16, 119);
+            this.darkLabel1.Name = "darkLabel1";
+            this.darkLabel1.Size = new System.Drawing.Size(59, 13);
+            this.darkLabel1.TabIndex = 23;
+            this.darkLabel1.Text = "Skill Delay:";
+            // 
+            // MaidRemake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 232);
+            this.ClientSize = new System.Drawing.Size(342, 257);
+            this.Controls.Add(this.darkLabel1);
+            this.Controls.Add(this.numSkillDelay);
             this.Controls.Add(this.cbWaitSkill);
             this.Controls.Add(this.cmbGotoUsername);
             this.Controls.Add(this.gbAdvancedOptions);
@@ -386,9 +453,9 @@
             this.Controls.Add(this.trgtUsrnmLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Main";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Maid Remake 4.0";
+            this.Name = "MaidRemake";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Maid Remake 5.0";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.gbOptions.ResumeLayout(false);
@@ -397,6 +464,7 @@
             this.gbAdvancedOptions.ResumeLayout(false);
             this.gbAdvancedOptions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numHealthPercent)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSkillDelay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -429,5 +497,9 @@
         private DarkUI.Controls.DarkLabel label2;
         private System.Windows.Forms.Label lbStopAttackBg;
         internal DarkUI.Controls.DarkCheckBox cbWaitSkill;
+        internal DarkUI.Controls.DarkCheckBox cbHandleLockedMap;
+        private System.Windows.Forms.LinkLabel lblLockedMapSetting;
+        private DarkUI.Controls.DarkNumericUpDown numSkillDelay;
+        private DarkUI.Controls.DarkLabel darkLabel1;
     }
 }

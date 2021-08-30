@@ -5,20 +5,30 @@ using System.Windows.Forms;
 using Grimoire.Game;
 using Grimoire.Networking;
 using DarkUI.Forms;
+using Grimoire.Tools;
+using MaidRemake.LockedMapHandle;
 
-namespace ExamplePacketPlugin
+namespace MaidRemake
 {
-    public partial class Main : DarkForm
+    public partial class MaidRemake : DarkForm
     {
-        public static Main Instance { get; } = new Main();
+        public static MaidRemake Instance { get; } = new MaidRemake();
 
-        public string targetUsername => Main.Instance.cmbGotoUsername.Text.ToLower();
+        public string targetUsername => MaidRemake.Instance.cmbGotoUsername.Text.ToLower();
+
+        public bool isPlayerInMyCell => bool.Parse(Flash.Call<string>("GetCellPlayers", new string[] { targetUsername }) ?? "False");
+
+        public bool isPlayerInMyRoom => IsPlayerInMap(targetUsername);
+
+        public int skillDelay => (int)MaidRemake.Instance.numSkillDelay.Value;
 
         LowLevelKeyboardHook kbh = new LowLevelKeyboardHook();
 
         public CellJumperHandler CJHandler { get; } = new CellJumperHandler();
 
-        private int healthPercent => (int)Main.Instance.numHealthPercent.Value;
+        public LockedMapHandler MapLockHandler { get; } = new LockedMapHandler();
+
+        private int healthPercent => (int)MaidRemake.Instance.numHealthPercent.Value;
 
         string[] buffSkill = null;
         int buffIndex = 0;
@@ -30,7 +40,7 @@ namespace ExamplePacketPlugin
 
         Stopwatch stopwatch = new Stopwatch();
 
-        public Main()
+        public MaidRemake()
         {
             InitializeComponent();
 
@@ -51,24 +61,31 @@ namespace ExamplePacketPlugin
         {
             if (cbEnablePlugin.Checked)
             {
-                cmbGotoUsername.Enabled = false;
-                tbSkillList.Enabled = false;
-                gbOptions.Enabled = false;
+                startUI();
 
                 int gotoTry = 0;
 
                 string[] skillList = tbSkillList.Text.Split(',');
                 int skillIndex = 0;
 
+                if (cbHandleLockedMap.Checked && AlternativeMap.Count() > 0)
+                {
+                    AlternativeMap.Init();
+                    Proxy.Instance.RegisterHandler(MapLockHandler);
+                }
+
                 if (!cbUnfollow.Checked)
                     Proxy.Instance.RegisterHandler(CJHandler);
+
+                if (Player.IsLoggedIn && !World.IsMapLoading && isPlayerInMyRoom && !isPlayerInMyCell)
+                    Player.GoToPlayer(targetUsername);
 
                 while(cbEnablePlugin.Checked)
                 {
                     try
                     {
                         // while player is logout -> do delay (2s), wait first join, do first join delay
-                        if (!Player.IsLoggedIn)
+                        if (cbEnablePlugin.Checked && !Player.IsLoggedIn)
                             await waitForFirstJoin();
 
                         // plugin disabled
@@ -76,7 +93,7 @@ namespace ExamplePacketPlugin
                             return;
 
                         // starting the plugin
-                        if (IsPlayerInMap(targetUsername) || cbUnfollow.Checked)
+                        if ((isPlayerInMyRoom || cbUnfollow.Checked) && Player.IsLoggedIn)
                         {
                             gotoTry = 0;
 
@@ -96,7 +113,7 @@ namespace ExamplePacketPlugin
                                 if (healIndex >= healSkill.Length)
                                     healIndex = 0;
 
-                                await Task.Delay(150);
+                                await Task.Delay(skillDelay);
                                 continue;
                             }
 
@@ -114,7 +131,7 @@ namespace ExamplePacketPlugin
                                         buffIndex = 0;
                                 }
 
-                                await Task.Delay(150);
+                                await Task.Delay(skillDelay);
                                 continue;
                             }
 
@@ -130,13 +147,15 @@ namespace ExamplePacketPlugin
                                 continue;
                             }
 
-                            Player.UseSkill(skillList[skillIndex]);
+                            if (Player.SkillAvailable(skillList[skillIndex]) == 0)
+                                Player.UseSkill(skillList[skillIndex]);
+                            
                             skillIndex++;
 
                             if (skillIndex >= skillList.Length)
                                 skillIndex = 0;
                         }
-                        else
+                        else if (Player.IsLoggedIn)
                         {
                             gotoTarget(targetUsername);
                             if (cbStopIf.Checked)
@@ -148,10 +167,28 @@ namespace ExamplePacketPlugin
                                     stopMaid();
                                 }
                             }
-                            await Task.Delay(2000);
+
+                            // wait loading screen before try to goto again
+                            for (int i = 0; i < 34 && cbEnablePlugin.Checked && !World.IsMapLoading && Player.IsLoggedIn; i++)
+                                await Task.Delay(150);
+
+                            // wait map loading end
+                            while (cbEnablePlugin.Checked && World.IsMapLoading && Player.IsLoggedIn)
+                                await Task.Delay(500);
+
+                            // wait 2 second before try to goto or join to different map (when locked map handler is enabled)
+                            for (int i = 0; i < 8 && cbEnablePlugin.Checked && cbHandleLockedMap.Checked && !World.IsMapLoading && Player.IsLoggedIn; i++)
+                                await Task.Delay(250);
+
+                            // goto target current cell when in the same room
+                            while (cbEnablePlugin.Checked && Player.IsLoggedIn && isPlayerInMyRoom && !isPlayerInMyCell)
+                            {
+                                Player.GoToPlayer(targetUsername);
+                                await Task.Delay(500);
+                            }
                         }
 
-                        await Task.Delay(150);
+                        await Task.Delay(skillDelay);
                     }
                     catch { }
                 }
@@ -165,11 +202,12 @@ namespace ExamplePacketPlugin
         private async Task waitForFirstJoin()
         {
             // wait player to join the map
-            while (World.IsMapLoading)
+            while (cbEnablePlugin.Checked && World.IsMapLoading)
                 await Task.Delay(2000);
 
             // do first join delay
-            await Task.Delay((int)numRelogDelay.Value);
+            if (cbEnablePlugin.Checked)
+                await Task.Delay((int)numRelogDelay.Value);
         }
 
         private void doPriorityAttack()
@@ -224,12 +262,29 @@ namespace ExamplePacketPlugin
 
         private void gotoTarget(string targetUsername)
         {
-            Player.MoveToCell("Blank", "Spawn");
+            if (Player.CurrentState != Player.State.Idle)
+                Player.MoveToCell("Blank", "Spawn");
             Proxy.Instance.SendToServer($"%xt%zm%cmd%1%goto%{targetUsername}%");
+        }
+
+        /* UI state */
+
+        public void startUI()
+        {
+            cmbGotoUsername.Enabled = false;
+            tbSkillList.Enabled = false;
+            gbOptions.Enabled = false;
+            if (LockedMapForm.Instance.Visible)
+            {
+                if (LockedMapForm.Instance.WindowState == FormWindowState.Minimized)
+                    LockedMapForm.Instance.WindowState = FormWindowState.Normal;
+                LockedMapForm.Instance.Hide();
+            }
         }
 
         public void stopMaid()
         {
+            Proxy.Instance.UnregisterHandler(MapLockHandler);
             Proxy.Instance.UnregisterHandler(CJHandler);
             cmbGotoUsername.Enabled = true;
             tbSkillList.Enabled = true;
@@ -347,7 +402,7 @@ namespace ExamplePacketPlugin
             if(cbBuffIfStop.Checked)
             {
                 tbBuffSkill.Enabled = false;
-                buffSkill = Main.Instance.tbBuffSkill.Text.Split(',');
+                buffSkill = MaidRemake.Instance.tbBuffSkill.Text.Split(',');
                 buffIndex = 0;
             }
             else
@@ -360,7 +415,7 @@ namespace ExamplePacketPlugin
         {
             if (cbAttackPriority.Checked)
             {
-                monsterList = Main.Instance.tbAttPriority.Text.Split(',');
+                monsterList = MaidRemake.Instance.tbAttPriority.Text.Split(',');
                 tbAttPriority.Enabled = false;
             }
             else
@@ -418,6 +473,19 @@ namespace ExamplePacketPlugin
             cmbGotoUsername.Items.Clear();
             foreach(string player in World.PlayersInMap)
                 cmbGotoUsername.Items.Add(player);
+        }
+
+        private void lblLockedMapSetting_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (LockedMapForm.Instance.Visible || LockedMapForm.Instance.WindowState == FormWindowState.Minimized)
+            {
+                LockedMapForm.Instance.WindowState = FormWindowState.Normal;
+                LockedMapForm.Instance.Hide();
+            }
+            else if (!LockedMapForm.Instance.Visible)
+            {
+                LockedMapForm.Instance.Show(this);
+            }
         }
     }
 }

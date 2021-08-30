@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExamplePacketPlugin</RootNamespace>
-    <AssemblyName>ExamplePacketPlugin</AssemblyName>
+    <AssemblyName>MaidRemake_5.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -46,21 +46,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LockedMapHandler.cs" />
     <Compile Include="CellJumperHandler.cs" />
     <Compile Include="ClassPreset.cs" />
     <Compile Include="Loader.cs" />
-    <Compile Include="LowLevelKeyboardHook.cs" />
-    <Compile Include="Main.cs">
+    <Compile Include="LockedMapHandle\AlternativeMap.cs" />
+    <Compile Include="LockedMapHandle\LockedMapForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
+    <Compile Include="LockedMapHandle\LockedMapForm.Designer.cs">
+      <DependentUpon>LockedMapForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LowLevelKeyboardHook.cs" />
+    <Compile Include="MaidRemake.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MaidRemake.Designer.cs">
+      <DependentUpon>MaidRemake.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LockedMapHandle\MessageBoxEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
+    <EmbeddedResource Include="LockedMapHandle\LockedMapForm.resx">
+      <DependentUpon>LockedMapForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MaidRemake.resx">
+      <DependentUpon>MaidRemake.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

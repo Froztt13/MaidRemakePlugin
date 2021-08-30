@@ -2,15 +2,16 @@
 using System.Windows.Forms;
 using Grimoire.Networking;
 using Grimoire.Tools.Plugins;
+using MaidRemake.LockedMapHandle;
 
-namespace ExamplePacketPlugin
+namespace MaidRemake
 {
     [GrimoirePluginEntry]
     public class Loader : IGrimoirePlugin
     {
         public string Author => "Afif_Sapi, Froztt13";
 
-        public string Description => "Battle maid to help your battle!.\r\n\r\n" +
+        public string Description => "Battle maid to help your battle!\r\n" +
             "This plugin will auto follow 'Goto Username' then attack and kill any monster.";
 
         private ToolStripItem menuItem;
@@ -24,22 +25,29 @@ namespace ExamplePacketPlugin
 
         public void Unload() // In this method you need to clean everything up
         {
-            Proxy.Instance.UnregisterHandler(Main.Instance.CJHandler);
+            Proxy.Instance.UnregisterHandler(MaidRemake.Instance.MapLockHandler);
+            Proxy.Instance.UnregisterHandler(MaidRemake.Instance.CJHandler);
             menuItem.Click -= MenuStripItem_Click;
             Grimoire.UI.Root.Instance.MenuMain.Items.Remove(menuItem);
-            Main.Instance.Dispose();
+            LockedMapForm.Instance.Dispose();
+            MaidRemake.Instance.Dispose();
         }
 
         private void MenuStripItem_Click(object sender, EventArgs e)
         {
-            if (Main.Instance.Visible)
+            if (MaidRemake.Instance.Visible)
             {
-                Main.Instance.Hide();
+                if (MaidRemake.Instance.WindowState == FormWindowState.Minimized)
+                    MaidRemake.Instance.WindowState = FormWindowState.Normal;
+                MaidRemake.Instance.Hide();
             }
             else
             {
-                Main.Instance.Show();
-                Main.Instance.BringToFront();
+                MaidRemake.Instance.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+                MaidRemake.Instance.Location = new System.Drawing.Point((Grimoire.UI.Root.Instance.Location.X + Grimoire.UI.Root.Instance.Width / 2) - 
+                    (MaidRemake.Instance.Width / 2), (Grimoire.UI.Root.Instance.Location.Y + Grimoire.UI.Root.Instance.Height / 2) - (MaidRemake.Instance.Height / 2));
+                MaidRemake.Instance.Show(Grimoire.UI.Root.Instance);
+                MaidRemake.Instance.BringToFront();
             }
         }
     }
