@@ -138,7 +138,7 @@ namespace MaidRemake
                             if (cbAttackPriority.Checked)
                                 doPriorityAttack();
 
-                            if (!Player.HasTarget)
+                            if (World.IsMonsterAvailable("*") && !Player.HasTarget)
                                 Player.AttackMonster("*");
 
                             if (cbWaitSkill.Checked && (Player.SkillAvailable(skillList[skillIndex]) > 0 || !Player.HasTarget))
@@ -147,7 +147,7 @@ namespace MaidRemake
                                 continue;
                             }
 
-                            if (Player.SkillAvailable(skillList[skillIndex]) == 0)
+                            if (Player.HasTarget && Player.SkillAvailable(skillList[skillIndex]) == 0)
                                 Player.UseSkill(skillList[skillIndex]);
                             
                             skillIndex++;
@@ -169,15 +169,15 @@ namespace MaidRemake
                             }
 
                             // wait loading screen before try to goto again
-                            for (int i = 0; i < 34 && cbEnablePlugin.Checked && !World.IsMapLoading && Player.IsLoggedIn; i++)
+                            for (int i = 0; i < 34 && cbEnablePlugin.Checked && Player.IsLoggedIn && !World.IsMapLoading; i++)
                                 await Task.Delay(150);
 
                             // wait map loading end
-                            while (cbEnablePlugin.Checked && World.IsMapLoading && Player.IsLoggedIn)
+                            while (cbEnablePlugin.Checked && Player.IsLoggedIn && World.IsMapLoading)
                                 await Task.Delay(500);
 
                             // wait 2 second before try to goto or join to different map (when locked map handler is enabled)
-                            for (int i = 0; i < 8 && cbEnablePlugin.Checked && cbHandleLockedMap.Checked && !World.IsMapLoading && Player.IsLoggedIn; i++)
+                            for (int i = 0; i < 8 && cbEnablePlugin.Checked && cbHandleLockedMap.Checked && Player.IsLoggedIn && !World.IsMapLoading; i++)
                                 await Task.Delay(250);
 
                             // goto target current cell when in the same room
@@ -241,23 +241,6 @@ namespace MaidRemake
         {
             int healthBoundary = Player.HealthMax * percentage / 100;
             return Player.Health <= healthBoundary ? true : false;
-
-            // if any party healt bellow setup (flash.call still buggy)
-            /*try
-            {
-                World.RefreshDictionary();
-                foreach (PlayerInfo player in World.Players)
-                {
-                    int healthBoundary = player.MaxHP * percentage / 100;
-                    if (player.HP <= healthBoundary)
-                        return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }*/
         }
 
         private void gotoTarget(string targetUsername)
