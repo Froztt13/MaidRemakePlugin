@@ -26,7 +26,7 @@ namespace MaidRemake
 
         public CellJumperHandler CJHandler { get; } = new CellJumperHandler();
 
-        public LockedMapHandler MapLockHandler { get; } = new LockedMapHandler();
+        public WarningMsgHandler RedMsgHandler { get; } = new WarningMsgHandler();
 
         private int healthPercent => (int)MaidRemake.Instance.numHealthPercent.Value;
 
@@ -69,10 +69,11 @@ namespace MaidRemake
                 int skillIndex = 0;
 
                 if (cbHandleLockedMap.Checked && AlternativeMap.Count() > 0)
-                {
                     AlternativeMap.Init();
-                    Proxy.Instance.RegisterHandler(MapLockHandler);
-                }
+                else if (cbHandleLockedMap.Checked)
+                    cbHandleLockedMap.Checked = false;
+
+                Proxy.Instance.RegisterHandler(RedMsgHandler);
 
                 if (!cbUnfollow.Checked)
                     Proxy.Instance.RegisterHandler(CJHandler);
@@ -80,7 +81,7 @@ namespace MaidRemake
                 if (Player.IsLoggedIn && !World.IsMapLoading && isPlayerInMyRoom && !isPlayerInMyCell)
                     Player.GoToPlayer(targetUsername);
 
-                while(cbEnablePlugin.Checked)
+                while (cbEnablePlugin.Checked)
                 {
                     try
                     {
@@ -147,9 +148,9 @@ namespace MaidRemake
                                 continue;
                             }
 
-                            if (Player.HasTarget && Player.SkillAvailable(skillList[skillIndex]) == 0)
+                            if (Player.SkillAvailable(skillList[skillIndex]) == 0)
                                 Player.UseSkill(skillList[skillIndex]);
-                            
+
                             skillIndex++;
 
                             if (skillIndex >= skillList.Length)
@@ -168,7 +169,7 @@ namespace MaidRemake
                                 }
                             }
 
-                            // wait loading screen before try to goto again
+                            // wait loading screen before try to goto again (max: 5100 ms)
                             for (int i = 0; i < 34 && cbEnablePlugin.Checked && Player.IsLoggedIn && !World.IsMapLoading; i++)
                                 await Task.Delay(150);
 
@@ -184,7 +185,9 @@ namespace MaidRemake
                             while (cbEnablePlugin.Checked && Player.IsLoggedIn && isPlayerInMyRoom && !isPlayerInMyCell)
                             {
                                 Player.GoToPlayer(targetUsername);
-                                await Task.Delay(500);
+                                if (cbEnablePlugin.Checked && Player.IsLoggedIn && isPlayerInMyRoom && !isPlayerInMyCell)
+                                    await Task.Delay(1000);
+                                else break;
                             }
                         }
 
@@ -267,7 +270,7 @@ namespace MaidRemake
 
         public void stopMaid()
         {
-            Proxy.Instance.UnregisterHandler(MapLockHandler);
+            Proxy.Instance.UnregisterHandler(RedMsgHandler);
             Proxy.Instance.UnregisterHandler(CJHandler);
             cmbGotoUsername.Enabled = true;
             tbSkillList.Enabled = true;

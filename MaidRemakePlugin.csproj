@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LockedMapHandler.cs" />
+    <Compile Include="WarningMsgHandler.cs" />
     <Compile Include="CellJumperHandler.cs" />
     <Compile Include="ClassPreset.cs" />
     <Compile Include="Loader.cs" />

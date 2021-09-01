@@ -25,7 +25,7 @@ namespace MaidRemake
 
         public void Unload() // In this method you need to clean everything up
         {
-            Proxy.Instance.UnregisterHandler(MaidRemake.Instance.MapLockHandler);
+            Proxy.Instance.UnregisterHandler(MaidRemake.Instance.RedMsgHandler);
             Proxy.Instance.UnregisterHandler(MaidRemake.Instance.CJHandler);
             menuItem.Click -= MenuStripItem_Click;
             Grimoire.UI.Root.Instance.MenuMain.Items.Remove(menuItem);
