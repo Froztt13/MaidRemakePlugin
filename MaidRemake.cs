@@ -78,7 +78,7 @@ namespace MaidRemake
                 if (!cbUnfollow.Checked)
                     Proxy.Instance.RegisterHandler(CJHandler);
 
-                if (Player.IsLoggedIn && !World.IsMapLoading && isPlayerInMyRoom && !isPlayerInMyCell)
+                if (!cbUnfollow.Checked && Player.IsLoggedIn && !World.IsMapLoading && isPlayerInMyRoom && !isPlayerInMyCell)
                     Player.GoToPlayer(targetUsername);
 
                 while (cbEnablePlugin.Checked)
@@ -94,7 +94,7 @@ namespace MaidRemake
                             return;
 
                         // starting the plugin
-                        if ((isPlayerInMyRoom || cbUnfollow.Checked) && Player.IsLoggedIn)
+                        if ((isPlayerInMyRoom || cbUnfollow.Checked) && Player.IsLoggedIn && !World.IsMapLoading)
                         {
                             gotoTry = 0;
 
@@ -156,7 +156,7 @@ namespace MaidRemake
                             if (skillIndex >= skillList.Length)
                                 skillIndex = 0;
                         }
-                        else if (Player.IsLoggedIn)
+                        else if (Player.IsLoggedIn && !World.IsMapLoading)
                         {
                             gotoTarget(targetUsername);
                             if (cbStopIf.Checked)
@@ -170,7 +170,7 @@ namespace MaidRemake
                             }
 
                             // wait loading screen before try to goto again (max: 5100 ms)
-                            for (int i = 0; i < 34 && cbEnablePlugin.Checked && Player.IsLoggedIn && !World.IsMapLoading; i++)
+                            for (int i = 0; i < 36 && cbEnablePlugin.Checked && Player.IsLoggedIn && !World.IsMapLoading; i++)
                                 await Task.Delay(150);
 
                             // wait map loading end

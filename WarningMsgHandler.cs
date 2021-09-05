@@ -17,10 +17,8 @@ namespace MaidRemake
 
         public void Handle(XtMessage message)
         {
-
             /*
                %xt%warning%-1%Cannot goto to player in a Locked zone.%
-
                 0 =
                 1 = xt
                 2 = warning
@@ -30,24 +28,36 @@ namespace MaidRemake
 
             if(isLockedMapHandlerEnabled && message.Arguments[4].Contains("Cannot goto to player in a Locked zone.") && Player.IsLoggedIn)
             {
-                string[] mapInfo = AlternativeMap.GetNext().Split(';');
-                Player.JoinMap(mapInfo[0], mapInfo[1], mapInfo[2]);
+                JoinAltMap();
             }
             else if (Player.IsLoggedIn && Player.Map != "whitemap")
             {
                 if (message.Arguments[4].Contains("Cannot goto to player in a Locked zone.") && Player.IsLoggedIn)
                 {
-                    Player.JoinMap($"whitemap-{new Random().Next(9999, 999999)}");
+                    GotoSafeMap();
                 }
                 else if (message.Arguments[4].Contains("Room join failed, destination room is full.") && Player.IsLoggedIn)
                 {
-                    Player.JoinMap($"whitemap-{new Random().Next(9999, 999999)}");
+                    GotoSafeMap();
                 }
                 else if (message.Arguments[4].Contains($"Player '{targetUsername}' could not be found.") && Player.IsLoggedIn)
                 {
-                    Player.JoinMap($"whitemap-{new Random().Next(9999, 999999)}");
+                    GotoSafeMap();
                 }
             }
+        }
+
+        public async void JoinAltMap()
+        {
+            await Task.Delay(new Random().Next(750, 1300));
+            string[] mapInfo = AlternativeMap.GetNext().Split(';');
+            Player.JoinMap(mapInfo[0], mapInfo[1], mapInfo[2]);
+        }
+
+        public async void GotoSafeMap()
+        {
+            await Task.Delay(new Random().Next(750, 1300));
+            Player.JoinMap($"whitemap-{new Random().Next(9999, 99999)}");
         }
     }
 }
