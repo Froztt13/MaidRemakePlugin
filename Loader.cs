@@ -12,7 +12,8 @@ namespace MaidRemake
         public string Author => "Afif_Sapi, Froztt13";
 
         public string Description => "Battle maid to help your battle!\r\n" +
-            "This plugin will auto follow 'Goto Username' then attack and kill any monster.";
+            "This plugin will auto follow 'Goto Username' then attack and kill any monster.\r\n" +
+            "Version: 5.2 (for Grimlite Rev)";
 
         private ToolStripItem menuItem;
 
