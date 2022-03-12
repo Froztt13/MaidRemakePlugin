@@ -57,7 +57,7 @@ namespace MaidRemake
         public async void GotoSafeMap()
         {
             await Task.Delay(new Random().Next(750, 1300));
-            Player.JoinMap($"whitemap-{new Random().Next(9999, 99999)}");
+            Player.JoinMap($"whitemap-{new Random().Next(9999, 99999)}", "Enter", "Spawn");
         }
     }
 }

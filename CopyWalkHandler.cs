@@ -11,15 +11,23 @@ namespace MaidRemake
 
         public void Handle(XtMessage message)
         {
-            /* When walk
-                % xt % uotls % -1 % username % sp:8,tx: 486,ty: 427,strFrame: Enter %
-
+            /*  When walk type 1
+                % xt % uotls % -1 % username % sp:8,tx:714,ty:356,strFrame:r1 %
                 0 =
                 1 = xt
                 2 = uotls
                 3 = -1
                 4 = username
-                5 = sp:8,tx: 486,ty: 427,strFrame: Enter
+                5 = sp:8,tx:714,ty:356,strFrame:r1
+
+                When walk type 2 - jump cell
+                % xt % uotls % -1 % username % mvts:1646524997575,sp:9,px:759,py:384,mvtd:503,tx:662,ty:346,strFrame:Enter %
+                0 =
+                1 = xt
+                2 = uotls
+                3 = -1
+                4 = username
+                5 = mvts:1646524997575,sp:9,px:759,py:384,mvtd:503,tx:662,ty:346,strFrame:Enter
             */
 
             try
@@ -27,13 +35,13 @@ namespace MaidRemake
                 // current Username
                 string currUsername = message.Arguments[4].ToLower();
 
-                if (message.Arguments[5].StartsWith("sp:") && (currUsername == targetUsername) && !World.IsMapLoading)
+                if ((currUsername == targetUsername) && !World.IsMapLoading)
                 {
                     string movement = message.Arguments[5].ToString();
                     string cell = null;
                     string pad = null;
-                    float tx = 0f;
-                    float ty = 0f;
+                    float x = 0f;
+                    float y = 0f;
                     foreach (string m in movement.Split(','))
                     {
                         if (m.Split(':')[0] == "strFrame")
@@ -41,13 +49,14 @@ namespace MaidRemake
                         if (m.Split(':')[0] == "strPad")
                             pad = m.Split(':')[1];
                         if (m.Split(':')[0] == "tx")
-                            tx = float.Parse(m.Split(':')[1]);
+                            x = float.Parse(m.Split(':')[1]);
                         if (m.Split(':')[0] == "ty")
-                            ty = float.Parse(m.Split(':')[1]);
+                            y = float.Parse(m.Split(':')[1]);
                     }
-                    if (tx != 0f && ty != 0f)
+                    if (x != 0f && y != 0f)
                     {
-                        Player.WalkToPoint(tx.ToString(), ty.ToString());
+                        System.Console.WriteLine($"Walk = x:{x} y:{y}");
+                        Player.WalkToPoint(x.ToString(), y.ToString());
                     }
                 }
             }

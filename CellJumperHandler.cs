@@ -1,10 +1,5 @@
 ﻿using Grimoire.Game;
 using Grimoire.Networking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MaidRemake
 {
@@ -16,24 +11,16 @@ namespace MaidRemake
 
         public void Handle(XtMessage message)
         {
-            /* When walk
-                % xt % uotls % -1 % username % sp:8,tx: 486,ty: 427,strFrame: Enter %
-
-                0 =
-                1 = xt
-                2 = uotls
-                3 = -1
-                4 = username
-                5 = sp:8,tx: 486,ty: 427,strFrame: Enter
-            * when jump into cell
-                % xt % uotls % -1 % username % strPad:Spawn,tx:0,strFrame:Enter,ty:0 %
+            /*
+                when jump into cell
+                % xt % uotls % -1 % username % mvts:-1,px:0,strPad:Spawn,py:0,mvtd:0,tx:0,strFrame:Enter,ty:0 %
                 
                 0 =
                 1 = xt
                 2 = uotls
                 3 = -1
                 4 = username
-                5 = strPad:Spawn,tx:0,strFrame:Enter,ty:0
+                5 = mvts:-1,px:0,strPad:Spawn,py:0,mvtd:0,tx:0,strFrame:Enter,ty:0
             */
 
             try
@@ -41,15 +28,23 @@ namespace MaidRemake
                 // current Username
                 string currUsername = message.Arguments[4].ToLower();
 
-                if (message.Arguments[5].StartsWith("strPad:") && (currUsername == targetUsername) && !World.IsMapLoading)
+                if (currUsername == targetUsername && !World.IsMapLoading)
                 {
-                    // strPad:Spawn (0), tx:0 (1), strFrame:Enter (2), ty:0 (3)
-                    string targetPad = message.Arguments[5].Split(',')[0].Split(':')[1];
-
-                    // strPad:Spawn (0), tx:0 (1), strFrame:Enter (2), ty:0 (3)
-                    string targetFrame = message.Arguments[5].Split(',')[2].Split(':')[1];
-
-                    Player.MoveToCell(targetFrame, targetPad);
+                    string movement = message.Arguments[5].ToString();
+                    string cell = null;
+                    string pad = null;
+                    foreach (string m in movement.Split(','))
+                    {
+                        if (m.Split(':')[0] == "strFrame")
+                            cell = m.Split(':')[1];
+                        if (m.Split(':')[0] == "strPad")
+                            pad = m.Split(':')[1];
+                    }
+                    if (cell != null && pad != null)
+                    {
+                        System.Console.WriteLine($"Jump = cell:{cell} pad:{pad}");
+                        Player.MoveToCell(cell, pad);
+                    }
                 }
             }
             catch { }

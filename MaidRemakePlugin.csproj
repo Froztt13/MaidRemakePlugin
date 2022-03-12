@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExamplePacketPlugin</RootNamespace>
-    <AssemblyName>MaidRemake_5.2</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AssemblyName>MaidRemake_5.2.2</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -36,6 +36,9 @@
     </Reference>
     <Reference Include="DarkUI">
       <HintPath>Dependency\DarkUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Grimoire">
+      <HintPath>..\GrimliteRev\Source Code\Version 1.3 - Skyguard Build\bin\Debug\Grimoire.exe</HintPath>
     </Reference>
     <Reference Include="Interop.ShockwaveFlashObjects">
       <HintPath>..\Grimlite-Li\Dependency\Interop.ShockwaveFlashObjects.dll</HintPath>
@@ -78,12 +81,6 @@
     <EmbeddedResource Include="MaidRemake.resx">
       <DependentUpon>MaidRemake.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Grimlite-Li\Grimoire.csproj">
-      <Project>{16f81920-2dc0-4aab-aa6c-d9ae599f6367}</Project>
-      <Name>Grimoire</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

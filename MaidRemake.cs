@@ -153,7 +153,7 @@ namespace MaidRemake
 								continue;
 							}
 
-							if (Player.SkillAvailable(skillList[skillIndex]) == 0)
+							if (Player.SkillAvailable(skillList[skillIndex]) == 0 && Player.HasTarget)
 								Player.UseSkill(skillList[skillIndex]);
 
 							skillIndex++;
@@ -251,11 +251,11 @@ namespace MaidRemake
 			return Player.Health <= healthBoundary ? true : false;
 		}
 
-		private void gotoTarget(string targetUsername)
+		private async void gotoTarget(string targetUsername)
 		{
 			if (Player.CurrentState != Player.State.Idle)
 				Player.MoveToCell("Blank", "Spawn");
-			Proxy.Instance.SendToServer($"%xt%zm%cmd%1%goto%{targetUsername}%");
+			await Proxy.Instance.SendToServer($"%xt%zm%cmd%1%goto%{targetUsername}%");
 		}
 
 		/* UI state */
