@@ -1,7 +1,7 @@
 ﻿using Grimoire.Game;
 using Grimoire.Networking;
 
-namespace MaidRemake
+namespace MaidRemake.Handlers
 {
     public class CellJumperHandler : IXtMessageHandler
     {

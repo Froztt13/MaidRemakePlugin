@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaidRemake
+namespace MaidRemake.Handlers
 {
     public class WarningMsgHandler : IXtMessageHandler
     {

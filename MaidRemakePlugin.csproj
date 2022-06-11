@@ -7,8 +7,8 @@
     <ProjectGuid>{F3AD5FF3-3BE9-4E53-8170-DD952BED9D9A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExamplePacketPlugin</RootNamespace>
-    <AssemblyName>MaidRemake_5.2.2</AssemblyName>
+    <RootNamespace>MaidRemake</RootNamespace>
+    <AssemblyName>MaidRemake_5.3</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -44,6 +44,9 @@
       <HintPath>..\Grimlite-Li\Dependency\Interop.ShockwaveFlashObjects.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -52,9 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CopyWalkHandler.cs" />
-    <Compile Include="WarningMsgHandler.cs" />
-    <Compile Include="CellJumperHandler.cs" />
+    <Compile Include="Handlers\CopyWalkHandler.cs" />
+    <Compile Include="Handlers\PartyInvitationHandler.cs" />
+    <Compile Include="MaidConfig.cs" />
+    <Compile Include="Handlers\PartyChatHandler.cs" />
+    <Compile Include="Handlers\WarningMsgHandler.cs" />
+    <Compile Include="Handlers\CellJumperHandler.cs" />
     <Compile Include="ClassPreset.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="LockedMapHandle\AlternativeMap.cs" />
@@ -81,6 +87,9 @@
     <EmbeddedResource Include="MaidRemake.resx">
       <DependentUpon>MaidRemake.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

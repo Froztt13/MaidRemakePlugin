@@ -7,6 +7,9 @@ using Grimoire.Networking;
 using DarkUI.Forms;
 using Grimoire.Tools;
 using MaidRemake.LockedMapHandle;
+using System.IO;
+using Newtonsoft.Json;
+using MaidRemake.Handlers;
 
 namespace MaidRemake
 {
@@ -30,6 +33,10 @@ namespace MaidRemake
 
 		public CopyWalkHandler CopyWalkHandler { get; } = new CopyWalkHandler();
 
+		public PartyChatHandler PartyChatHandler { get; } = new PartyChatHandler();
+
+		public PartyInvitationHandler PartyInvitationHandler { get; } = new PartyInvitationHandler();
+
 		private int healthPercent => (int)MaidRemake.Instance.numHealthPercent.Value;
 
 		string[] buffSkill = null;
@@ -48,6 +55,7 @@ namespace MaidRemake
 
 			KeyPreview = true;
 			this.KeyDown += new KeyEventHandler(this.hotkey);
+			this.Text = $"Maid Remake {Loader.Version}";
 		}
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -126,9 +134,12 @@ namespace MaidRemake
 							if (cbStopAttack.Checked)
 							{
 								if (Player.HasTarget)
+								{
+									Player.CancelAutoAttack();
 									Player.CancelTarget();
+								}
 
-								if (cbBuffIfStop.Checked && tbBuffSkill.Text != String.Empty && isPlayerInCombat())
+								if (cbBuffIfStop.Checked && tbBuffSkill.Text != String.Empty)
 								{
 									Player.UseSkill(buffSkill[buffIndex]);
 									buffIndex++;
@@ -153,8 +164,10 @@ namespace MaidRemake
 								continue;
 							}
 
-							if (Player.SkillAvailable(skillList[skillIndex]) == 0 && Player.HasTarget)
+							if (Player.HasTarget)
+							{
 								Player.UseSkill(skillList[skillIndex]);
+							}
 
 							skillIndex++;
 
@@ -254,7 +267,7 @@ namespace MaidRemake
 		private async void gotoTarget(string targetUsername)
 		{
 			if (Player.CurrentState != Player.State.Idle)
-				Player.MoveToCell("Blank", "Spawn");
+				Player.MoveToCell("Maid", "Spawn");
 			await Proxy.Instance.SendToServer($"%xt%zm%cmd%1%goto%{targetUsername}%");
 		}
 
@@ -278,6 +291,7 @@ namespace MaidRemake
 			Proxy.Instance.UnregisterHandler(RedMsgHandler);
 			Proxy.Instance.UnregisterHandler(CJHandler);
 			Proxy.Instance.UnregisterHandler(CopyWalkHandler);
+
 			cmbGotoUsername.Enabled = true;
 			tbSkillList.Enabled = true;
 			gbOptions.Enabled = true;
@@ -346,9 +360,15 @@ namespace MaidRemake
 		private void cbLockCell_CheckedChanged(object sender, EventArgs e)
 		{
 			if(cbUnfollow.Checked)
+			{
 				Proxy.Instance.UnregisterHandler(CJHandler);
+				Proxy.Instance.UnregisterHandler(CopyWalkHandler);
+			}
 			else
+			{
 				Proxy.Instance.RegisterHandler(CJHandler);
+				Proxy.Instance.RegisterHandler(CopyWalkHandler);
+			}
 		}
 
 		private void cbStopAttack_CheckedChanged(object sender, EventArgs e)
@@ -360,8 +380,8 @@ namespace MaidRemake
 				stopwatch.Start();
 				timerStopAttack.Enabled = true;
 				cbStopAttack.BackColor = System.Drawing.Color.Magenta;
-				if (Player.HasTarget)
-					Player.CancelTarget();
+				Player.CancelAutoAttack();
+				Player.CancelTarget();
 				Player.Rest();
 			}
 			else
@@ -477,6 +497,108 @@ namespace MaidRemake
 			else if (!LockedMapForm.Instance.Visible)
 			{
 				LockedMapForm.Instance.Show(this);
+			}
+		}
+
+		private void btnSave_Click(object sender, EventArgs e)
+		{
+			MaidConfig maidConfig = new MaidConfig
+			{
+				SkillList = tbSkillList.Text,
+				SkillDelay = (int)numSkillDelay.Value,
+				WaitSkill = cbWaitSkill.Checked,
+				StopFailedGoto = cbStopIf.Checked,
+				LockedZoneHandler = cbHandleLockedMap.Checked,
+				LockedZoneHandlerMaps = LockedMapForm.Instance.tbLockedMapAlternative.Text,
+				RelogDelay = (int)numRelogDelay.Value,
+				GlobalHotkey = cbEnableGlobalHotkey.Checked,
+				Unfollow = cbUnfollow.Checked,
+				StopAttack = cbStopAttack.Checked,
+				SafeSkillList = tbHealSkill.Text,
+				SafeSkillHP = (int)numHealthPercent.Value,
+				BuffStopAttack = tbBuffSkill.Text,
+				AttackPriority = cbAttackPriority.Checked,
+				AttackPriorityMonster = tbAttPriority.Text,
+				CopyWalk = cbCopyWalk.Checked,
+			};
+			using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+			{
+				saveFileDialog.Title = "Save config";
+				saveFileDialog.InitialDirectory = Path.Combine(Application.StartupPath, "Config");
+				saveFileDialog.Filter = "Maid config|*.json";
+				saveFileDialog.DefaultExt = ".json";
+				saveFileDialog.CheckFileExists = false;
+				if (saveFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					try
+					{
+						File.WriteAllText(saveFileDialog.FileName, JsonConvert.SerializeObject(maidConfig, Formatting.Indented));
+						string[] path = saveFileDialog.FileName.Split('\\');
+						lblConfigName.Text = $"Config: {path[path.Length-1]}";
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("Unable to save config: " + ex.Message);
+					}
+				}
+			}
+		}
+
+		private void btnLoad_Click(object sender, EventArgs e)
+		{
+			using (OpenFileDialog openFileDialog = new OpenFileDialog())
+			{
+				openFileDialog.Title = "Load config";
+				openFileDialog.InitialDirectory = Path.Combine(Application.StartupPath, "Config");
+				openFileDialog.Filter = "Maid config|*.json";
+				openFileDialog.DefaultExt = ".json";
+				if (openFileDialog.ShowDialog() == DialogResult.OK && 
+					TryDeserialize(File.ReadAllText(openFileDialog.FileName), out MaidConfig config))
+				{
+					lblConfigName.Text = $"Config: {openFileDialog.SafeFileName}";
+					tbSkillList.Text = config.SkillList;
+					numSkillDelay.Value = config.SkillDelay;
+					cbWaitSkill.Checked = config.WaitSkill;
+					cbStopIf.Checked = config.StopFailedGoto;
+					cbHandleLockedMap.Checked = config.LockedZoneHandler;
+					LockedMapForm.Instance.tbLockedMapAlternative.Text = config.LockedZoneHandlerMaps;
+					numRelogDelay.Value = config.RelogDelay;
+					cbEnableGlobalHotkey.Checked = config.GlobalHotkey;
+					cbUnfollow.Checked = config.Unfollow;
+					cbStopAttack.Checked = config.StopAttack;
+					tbHealSkill.Text = config.SafeSkillList;
+					numHealthPercent.Value = config.SafeSkillHP;
+					tbBuffSkill.Text = config.BuffStopAttack;
+					cbAttackPriority.Checked = config.AttackPriority;
+					tbAttPriority.Text = config.AttackPriorityMonster;
+					cbCopyWalk.Checked = config.CopyWalk;
+				}
+			}
+		}
+
+		private bool TryDeserialize(string json, out MaidConfig config)
+		{
+			try
+			{
+				config = JsonConvert.DeserializeObject<MaidConfig>(json);
+				return true;
+			}
+			catch (Exception e) { MessageBox.Show(e.ToString()); }
+			config = null;
+			return false;
+		}
+
+		private void cbPartyCmd_CheckedChanged(object sender, EventArgs e)
+		{
+			if (cbPartyCmd.Checked)
+			{
+				Proxy.Instance.RegisterHandler(PartyInvitationHandler);
+				Proxy.Instance.RegisterHandler(PartyChatHandler);
+			} 
+			else
+			{
+				Proxy.Instance.UnregisterHandler(PartyInvitationHandler);
+				Proxy.Instance.UnregisterHandler(PartyChatHandler);
 			}
 		}
 	}
