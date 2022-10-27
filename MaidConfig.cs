@@ -8,6 +8,8 @@ namespace MaidRemake
 {
 	internal class MaidConfig
 	{
+		public string Target;
+
 		public string SkillList;
 
 		public int SkillDelay;
@@ -24,15 +26,15 @@ namespace MaidRemake
 
 		public bool GlobalHotkey;
 
-		public bool Unfollow;
-
-		public bool StopAttack;
+		public bool SafeSkill;
 
 		public string SafeSkillList;
 
 		public int SafeSkillHP;
 
-		public string BuffStopAttack;
+		public bool BuffStopAttack;
+
+		public string BuffStopAttackList;
 
 		public bool AttackPriority;
 

@@ -504,6 +504,7 @@ namespace MaidRemake
 		{
 			MaidConfig maidConfig = new MaidConfig
 			{
+				Target = cmbGotoUsername.Text,
 				SkillList = tbSkillList.Text,
 				SkillDelay = (int)numSkillDelay.Value,
 				WaitSkill = cbWaitSkill.Checked,
@@ -512,11 +513,11 @@ namespace MaidRemake
 				LockedZoneHandlerMaps = LockedMapForm.Instance.tbLockedMapAlternative.Text,
 				RelogDelay = (int)numRelogDelay.Value,
 				GlobalHotkey = cbEnableGlobalHotkey.Checked,
-				Unfollow = cbUnfollow.Checked,
-				StopAttack = cbStopAttack.Checked,
+				SafeSkill = cbUseHeal.Checked,
 				SafeSkillList = tbHealSkill.Text,
 				SafeSkillHP = (int)numHealthPercent.Value,
-				BuffStopAttack = tbBuffSkill.Text,
+				BuffStopAttack = cbBuffIfStop.Checked,
+				BuffStopAttackList = tbBuffSkill.Text,
 				AttackPriority = cbAttackPriority.Checked,
 				AttackPriorityMonster = tbAttPriority.Text,
 				CopyWalk = cbCopyWalk.Checked,
@@ -556,6 +557,7 @@ namespace MaidRemake
 					TryDeserialize(File.ReadAllText(openFileDialog.FileName), out MaidConfig config))
 				{
 					lblConfigName.Text = $"Config: {openFileDialog.SafeFileName}";
+					cmbGotoUsername.Text = config.Target;
 					tbSkillList.Text = config.SkillList;
 					numSkillDelay.Value = config.SkillDelay;
 					cbWaitSkill.Checked = config.WaitSkill;
@@ -564,11 +566,11 @@ namespace MaidRemake
 					LockedMapForm.Instance.tbLockedMapAlternative.Text = config.LockedZoneHandlerMaps;
 					numRelogDelay.Value = config.RelogDelay;
 					cbEnableGlobalHotkey.Checked = config.GlobalHotkey;
-					cbUnfollow.Checked = config.Unfollow;
-					cbStopAttack.Checked = config.StopAttack;
+					cbUseHeal.Checked = config.SafeSkill;
 					tbHealSkill.Text = config.SafeSkillList;
 					numHealthPercent.Value = config.SafeSkillHP;
-					tbBuffSkill.Text = config.BuffStopAttack;
+					cbBuffIfStop.Checked = config.BuffStopAttack;
+					tbBuffSkill.Text = config.BuffStopAttackList;
 					cbAttackPriority.Checked = config.AttackPriority;
 					tbAttPriority.Text = config.AttackPriorityMonster;
 					cbCopyWalk.Checked = config.CopyWalk;
