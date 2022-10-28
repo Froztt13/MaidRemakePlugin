@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaidRemake
+namespace MaidRemake.Handlers
 {
     public class WarningMsgHandler : IXtMessageHandler
     {
@@ -57,7 +57,7 @@ namespace MaidRemake
         public async void GotoSafeMap()
         {
             await Task.Delay(new Random().Next(750, 1300));
-            Player.JoinMap($"whitemap-{new Random().Next(9999, 99999)}");
+            Player.JoinMap($"whitemap-{new Random().Next(9999, 99999)}", "Enter", "Spawn");
         }
     }
 }

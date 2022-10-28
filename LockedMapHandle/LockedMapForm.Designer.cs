@@ -204,7 +204,7 @@ namespace MaidRemake.LockedMapHandle
 
         #endregion
 
-        private DarkUI.Controls.DarkTextBox tbLockedMapAlternative;
+        public DarkUI.Controls.DarkTextBox tbLockedMapAlternative;
         private DarkUI.Controls.DarkLabel darkLabel1;
         private DarkUI.Controls.DarkLabel darkLabel2;
         private DarkUI.Controls.DarkTextBox tbGrabMapResult;

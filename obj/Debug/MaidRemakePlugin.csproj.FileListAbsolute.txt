@@ -32,3 +32,24 @@ C:\Users\Oni Ahmad\Desktop\refresh\Grim Plugin\Grimlite\MaidRemakePlugin\obj\Deb
 C:\Users\Oni Ahmad\Desktop\refresh\Grim Plugin\Grimlite\MaidRemakePlugin\obj\Debug\MaidRemake_5.0.pdb
 C:\Users\Oni Ahmad\Desktop\refresh\Grim Plugin\Grimlite\MaidRemakePlugin\obj\Debug\MaidRemake.LockedMapHandle.LockedMapForm.resources
 C:\Users\Oni Ahmad\Desktop\refresh\Grim Plugin\Grimlite\MaidRemakePlugin\obj\Debug\MaidRemake.MaidRemake.resources
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemakePlugin.csproj.AssemblyReference.cache
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemake.LockedMapHandle.LockedMapForm.resources
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemake.MaidRemake.resources
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemakePlugin.csproj.GenerateResource.cache
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemakePlugin.csproj.CoreCompileInputs.cache
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\EasyHook32.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\EasyHook32Svc.exe
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\EasyHook64.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\EasyHook64Svc.exe
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\EasyLoad32.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\EasyLoad64.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\AxInterop.ShockwaveFlashObjects.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\DarkUI.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\Grimoire.exe
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\Grimoire.pdb
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\Grimoire.exe.config
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemakePlugin.csproj.CopyComplete
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\MaidRemake_5.2.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\bin\Debug\MaidRemake_5.2.pdb
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemake_5.2.dll
+C:\Users\yohan\Documents\Visual Studio\MaidRemakePluginRepo\obj\Debug\MaidRemake_5.2.pdb
