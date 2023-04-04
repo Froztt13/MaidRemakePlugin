@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MaidRemake.LockedMapHandle
+namespace MaidRemake
 {
     public static class MessageBoxEx
     {

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MaidRemake</RootNamespace>
-    <AssemblyName>MaidRemake_5.3</AssemblyName>
+    <AssemblyName>MaidRemake_5.4</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -17,10 +17,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>Grimlite Li\Plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,7 +39,7 @@
       <HintPath>Dependency\DarkUI.dll</HintPath>
     </Reference>
     <Reference Include="Grimoire">
-      <HintPath>..\GrimliteRev\Source Code\Version 1.3 - Skyguard Build\bin\Debug\Grimoire.exe</HintPath>
+      <HintPath>..\Grimlite-Li-Froztt13\bin\Debug\Grimoire.exe</HintPath>
     </Reference>
     <Reference Include="Interop.ShockwaveFlashObjects">
       <HintPath>..\Grimlite-Li\Dependency\Interop.ShockwaveFlashObjects.dll</HintPath>
@@ -56,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Handlers\CopyWalkHandler.cs" />
+    <Compile Include="Handlers\JoinMapHandler.cs" />
     <Compile Include="Handlers\PartyInvitationHandler.cs" />
     <Compile Include="MaidConfig.cs" />
     <Compile Include="Handlers\PartyChatHandler.cs" />
@@ -77,8 +79,14 @@
     <Compile Include="MaidRemake.Designer.cs">
       <DependentUpon>MaidRemake.cs</DependentUpon>
     </Compile>
-    <Compile Include="LockedMapHandle\MessageBoxEx.cs" />
+    <Compile Include="MessageBoxEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WhitelistMap\WhitelistMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WhitelistMap\WhitelistMap.Designer.cs">
+      <DependentUpon>WhitelistMap.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LockedMapHandle\LockedMapForm.resx">
@@ -86,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MaidRemake.resx">
       <DependentUpon>MaidRemake.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhitelistMap\WhitelistMap.resx">
+      <DependentUpon>WhitelistMap.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

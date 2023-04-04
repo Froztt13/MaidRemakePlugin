@@ -22,6 +22,10 @@ namespace MaidRemake
 
 		public string LockedZoneHandlerMaps;
 
+		public bool WhitelistMap;
+
+		public string WhitelistMapMaps;
+
 		public int RelogDelay;
 
 		public bool GlobalHotkey;

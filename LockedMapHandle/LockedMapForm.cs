@@ -34,28 +34,6 @@ namespace MaidRemake.LockedMapHandle
             }
         }
 
-        private void btnGrabMap_Click(object sender, EventArgs e)
-        {
-            if(Player.IsLoggedIn && !World.IsMapLoading)
-            {
-                string getMapInfo = $"{Player.Map}-{Flash.Call<int>("RoomNumber", new string[0])}";
-                tbGrabMapResult.Text = $"{getMapInfo};{Player.Cell};{Player.Pad}";
-            }
-            else
-            {
-                tbGrabMapResult.Text = String.Empty;
-            }
-        }
-
-        private void btnAddToList_Click(object sender, EventArgs e)
-        {
-            if (tbGrabMapResult.Text != String.Empty)
-            {
-                tbLockedMapAlternative.Text += tbLockedMapAlternative.Text == String.Empty ? String.Empty : "\r\n";
-                tbLockedMapAlternative.Text += tbGrabMapResult.Text;
-            }
-        }
-
         private List<string> getMaps()
         {
             Regex rgx = new Regex("[^a-zA-Z0-9\\-\\;\\r\\n]");
@@ -120,6 +98,28 @@ namespace MaidRemake.LockedMapHandle
         private void lblClear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             tbLockedMapAlternative.Text = String.Empty;
-        }
-    }
+		}
+
+		private void btnGrabMap_Click(object sender, EventArgs e)
+		{
+			if (Player.IsLoggedIn && !World.IsMapLoading)
+			{
+				string getMapInfo = $"{Player.Map}-{Flash.Call<int>("RoomNumber", new string[0])}";
+				tbGrabMapResult.Text = $"{getMapInfo};{Player.Cell};{Player.Pad}";
+			}
+			else
+			{
+				tbGrabMapResult.Text = String.Empty;
+			}
+		}
+
+		private void btnAddToList_Click(object sender, EventArgs e)
+		{
+			if (tbGrabMapResult.Text != String.Empty)
+			{
+				tbLockedMapAlternative.Text += tbLockedMapAlternative.Text == String.Empty ? String.Empty : "\r\n";
+				tbLockedMapAlternative.Text += tbGrabMapResult.Text;
+			}
+		}
+	}
 }

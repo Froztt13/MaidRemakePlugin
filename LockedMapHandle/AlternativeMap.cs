@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MaidRemake.LockedMapHandle
 {
-    public static class AlternativeMap
+    public class AlternativeMap
     {
-        private static List<string> mapList = new List<string>();
+        private List<string> mapList = new List<string>();
 
-        private static int currIndex = 0;
-
-        public static void Init()
+		public AlternativeMap(List<string> mapList)
         {
-            mapList = LockedMapForm.Instance.getAlternativeMap;
+            this.mapList = mapList;
+        }
+
+		private int currIndex = 0;
+
+        public void Init()
+        {
             currIndex = 0;
         }
 
-        public static int Count()
+        public int Count()
         {
-            mapList = LockedMapForm.Instance.getAlternativeMap;
             return mapList.Count;
         }
 
-        public static string GetNext()
+        public string GetNext()
         {
             if (mapList.Count > 0)
             {

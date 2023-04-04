@@ -9,7 +9,7 @@ namespace MaidRemake
     [GrimoirePluginEntry]
     public class Loader : IGrimoirePlugin
     {
-        public static string Version => "5.3";
+        public static string Version => "5.4";
         public string Author => "Afif_Sapi, Froztt13";
 
         public string Description => "Battle maid to help your battle!\r\n" +

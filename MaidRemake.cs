@@ -7,9 +7,12 @@ using Grimoire.Networking;
 using DarkUI.Forms;
 using Grimoire.Tools;
 using MaidRemake.LockedMapHandle;
+using MaidRemake.WhitelistMap;
 using System.IO;
 using Newtonsoft.Json;
 using MaidRemake.Handlers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MaidRemake
 {
@@ -29,6 +32,8 @@ namespace MaidRemake
 
 		public CellJumperHandler CJHandler { get; } = new CellJumperHandler();
 
+		public JoinMapHandler JoinMapHandler { get; } = new JoinMapHandler();
+
 		public WarningMsgHandler RedMsgHandler { get; } = new WarningMsgHandler();
 
 		public CopyWalkHandler CopyWalkHandler { get; } = new CopyWalkHandler();
@@ -36,6 +41,8 @@ namespace MaidRemake
 		public PartyChatHandler PartyChatHandler { get; } = new PartyChatHandler();
 
 		public PartyInvitationHandler PartyInvitationHandler { get; } = new PartyInvitationHandler();
+
+		private AlternativeMap AlternativeMap { get; } = new AlternativeMap(LockedMapForm.Instance.getAlternativeMap);
 
 		private int healthPercent => (int)MaidRemake.Instance.numHealthPercent.Value;
 
@@ -46,6 +53,8 @@ namespace MaidRemake
 		int healIndex = 0;
 
 		string[] monsterList = null;
+
+		bool onPause = false;
 
 		Stopwatch stopwatch = new Stopwatch();
 
@@ -85,6 +94,8 @@ namespace MaidRemake
 
 				Proxy.Instance.RegisterHandler(RedMsgHandler);
 
+				Proxy.Instance.RegisterHandler(JoinMapHandler);
+
 				if (!cbUnfollow.Checked)
 					Proxy.Instance.RegisterHandler(CJHandler);
 
@@ -107,7 +118,7 @@ namespace MaidRemake
 							return;
 
 						// starting the plugin
-						if ((isPlayerInMyRoom || cbUnfollow.Checked) && Player.IsLoggedIn && !World.IsMapLoading)
+						if ((isPlayerInMyRoom || cbUnfollow.Checked) && Player.IsLoggedIn && !World.IsMapLoading && !onPause)
 						{
 							gotoTry = 0;
 
@@ -267,8 +278,10 @@ namespace MaidRemake
 		private async void gotoTarget(string targetUsername)
 		{
 			if (Player.CurrentState != Player.State.Idle)
-				Player.MoveToCell("Maid", "Spawn");
-			await Proxy.Instance.SendToServer($"%xt%zm%cmd%1%goto%{targetUsername}%");
+				Player.MoveToCell("Enter", "Spawn");
+			await Task.Delay(500);
+			Player.GoToPlayer(targetUsername);
+			//await Proxy.Instance.SendToServer($"%xt%zm%cmd%1%goto%{targetUsername}%");
 		}
 
 		/* UI state */
@@ -284,24 +297,34 @@ namespace MaidRemake
 					LockedMapForm.Instance.WindowState = FormWindowState.Normal;
 				LockedMapForm.Instance.Hide();
 			}
+			if (WhitelistMapForm.Instance.Visible)
+			{
+				if (WhitelistMapForm.Instance.WindowState == FormWindowState.Minimized)
+					WhitelistMapForm.Instance.WindowState = FormWindowState.Normal;
+				WhitelistMapForm.Instance.Hide();
+			}
 		}
 
 		public void stopMaid()
 		{
 			Proxy.Instance.UnregisterHandler(RedMsgHandler);
 			Proxy.Instance.UnregisterHandler(CJHandler);
+			Proxy.Instance.UnregisterHandler(JoinMapHandler);
 			Proxy.Instance.UnregisterHandler(CopyWalkHandler);
 
 			cmbGotoUsername.Enabled = true;
 			tbSkillList.Enabled = true;
 			gbOptions.Enabled = true;
 			cbEnablePlugin.Checked = false;
+			onPause = false;
 		}
 
 		/* Hotkey */
 
 		private void cbEnableGlobalHotkey_CheckedChanged(object sender, EventArgs e)
 		{
+			cbUnfollow.Enabled = cbEnableGlobalHotkey.Checked;
+			cbStopAttack.Enabled = cbEnableGlobalHotkey.Checked;
 			if (cbEnableGlobalHotkey.Checked)
 			{
 				kbh.OnKeyPressed += globalHotkey;
@@ -325,54 +348,77 @@ namespace MaidRemake
 			if (cmbGotoUsername.Focused || tbAttPriority.Focused)
 				return;
 
-			if (e.KeyCode == Keys.R)
+			switch (e.KeyCode)
 			{
-				// LockCell: R
-				e.SuppressKeyPress = true;
-				cbUnfollow.Checked = cbUnfollow.Checked ? false : true;
-			}
-			else if (e.KeyCode == Keys.T)
-			{
-				// StopAttack: T
-				e.SuppressKeyPress = true;
-				cbStopAttack.Checked = cbStopAttack.Checked ? false : true;
+				case Keys.R:
+					// LockCell: R
+					e.SuppressKeyPress = true;
+					cbUnfollow.Checked = cbUnfollow.Checked ? false : true;
+					break;
+				case Keys.T:
+					// StopAttack: T
+					e.SuppressKeyPress = true;
+					cbStopAttack.Checked = cbStopAttack.Checked ? false : true;
+					break;
 			}
 		}
+
 		private void globalHotkey(object sender, Keys e)
 		{
 			if (cmbGotoUsername.Focused || tbAttPriority.Focused)
 				return;
 
-			if (e == Keys.R)
+			switch(e)
 			{
-				// LockCell: R
-				cbUnfollow.Checked = cbUnfollow.Checked ? false : true;
-			}
-			else if (e == Keys.T)
-			{
-				// StopAttack: T
-				cbStopAttack.Checked = cbStopAttack.Checked ? false : true;
+				case Keys.R:
+					// LockCell: R
+					cbUnfollow.Checked = cbUnfollow.Checked ? false : true;
+					break;
+				case Keys.T:
+					// StopAttack: T
+					cbStopAttack.Checked = cbStopAttack.Checked ? false : true;
+					break;
 			}
 		}
 
 		/* Other Control */
 
+		public void pauseFollow()
+		{
+			if (onPause) return;
+			if (cbCopyWalk.Checked) 
+				Proxy.Instance.UnregisterHandler(CopyWalkHandler);
+			onPause = true;
+			logDebug("onPause: true");
+		}
+
+		public void resumeFollow()
+		{
+			if (!onPause) return;
+			if (cbCopyWalk.Checked) 
+				Proxy.Instance.RegisterHandler(CopyWalkHandler);
+			onPause = false;
+			logDebug("onPause: false");
+		}
+
 		private void cbLockCell_CheckedChanged(object sender, EventArgs e)
 		{
+			if (cbEnableGlobalHotkey.Checked == false) return;
 			if(cbUnfollow.Checked)
 			{
 				Proxy.Instance.UnregisterHandler(CJHandler);
-				Proxy.Instance.UnregisterHandler(CopyWalkHandler);
+				if (cbCopyWalk.Checked) Proxy.Instance.UnregisterHandler(CopyWalkHandler);
 			}
 			else
 			{
 				Proxy.Instance.RegisterHandler(CJHandler);
-				Proxy.Instance.RegisterHandler(CopyWalkHandler);
+				if (cbCopyWalk.Checked) Proxy.Instance.RegisterHandler(CopyWalkHandler);
 			}
 		}
 
 		private void cbStopAttack_CheckedChanged(object sender, EventArgs e)
 		{
+			if (cbEnableGlobalHotkey.Checked == false) return;
 			if (cbStopAttack.Checked)
 			{
 				lbStopAttackBg.BackColor = System.Drawing.Color.DeepPink;
@@ -511,6 +557,8 @@ namespace MaidRemake
 				StopFailedGoto = cbStopIf.Checked,
 				LockedZoneHandler = cbHandleLockedMap.Checked,
 				LockedZoneHandlerMaps = LockedMapForm.Instance.tbLockedMapAlternative.Text,
+				WhitelistMap = cbWhitelistMap.Checked,
+				WhitelistMapMaps = WhitelistMapForm.Instance.tbWhitelistMap.Text,
 				RelogDelay = (int)numRelogDelay.Value,
 				GlobalHotkey = cbEnableGlobalHotkey.Checked,
 				SafeSkill = cbUseHeal.Checked,
@@ -564,6 +612,8 @@ namespace MaidRemake
 					cbStopIf.Checked = config.StopFailedGoto;
 					cbHandleLockedMap.Checked = config.LockedZoneHandler;
 					LockedMapForm.Instance.tbLockedMapAlternative.Text = config.LockedZoneHandlerMaps;
+					cbWhitelistMap.Checked = config.WhitelistMap;
+					WhitelistMapForm.Instance.tbWhitelistMap.Text = config.WhitelistMapMaps;
 					numRelogDelay.Value = config.RelogDelay;
 					cbEnableGlobalHotkey.Checked = config.GlobalHotkey;
 					cbUseHeal.Checked = config.SafeSkill;
@@ -602,6 +652,24 @@ namespace MaidRemake
 				Proxy.Instance.UnregisterHandler(PartyInvitationHandler);
 				Proxy.Instance.UnregisterHandler(PartyChatHandler);
 			}
+		}
+
+		private void lblWhitelistMap_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			if (WhitelistMapForm.Instance.Visible || WhitelistMapForm.Instance.WindowState == FormWindowState.Minimized)
+			{
+				WhitelistMapForm.Instance.WindowState = FormWindowState.Normal;
+				WhitelistMapForm.Instance.Hide();
+			}
+			else if (!WhitelistMapForm.Instance.Visible)
+			{
+				WhitelistMapForm.Instance.Show(this);
+			}
+		}
+
+		public void logDebug(string msg)
+		{
+			Grimoire.UI.LogForm.Instance.AppendDebug($"[MaidRemake] {msg}");
 		}
 	}
 }
