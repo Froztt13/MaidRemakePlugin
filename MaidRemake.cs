@@ -42,8 +42,6 @@ namespace MaidRemake
 
 		public PartyInvitationHandler PartyInvitationHandler { get; } = new PartyInvitationHandler();
 
-		private AlternativeMap AlternativeMap { get; } = new AlternativeMap(LockedMapForm.Instance.getAlternativeMap);
-
 		private int healthPercent => (int)MaidRemake.Instance.numHealthPercent.Value;
 
 		string[] buffSkill = null;

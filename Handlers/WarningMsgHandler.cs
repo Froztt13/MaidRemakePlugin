@@ -14,7 +14,6 @@ namespace MaidRemake.Handlers
         public string[] HandledCommands { get; } = { "warning" };
         public string targetUsername => MaidRemake.Instance.cmbGotoUsername.Text.ToLower();
         public bool isLockedMapHandlerEnabled => MaidRemake.Instance.cbHandleLockedMap.Checked;
-        private AlternativeMap AlternativeMap { get; } = new AlternativeMap(LockedMapForm.Instance.getAlternativeMap);
 
         public void Handle(XtMessage message)
         {
