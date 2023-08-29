@@ -11,8 +11,8 @@ using MaidRemake.WhitelistMap;
 using System.IO;
 using Newtonsoft.Json;
 using MaidRemake.Handlers;
-using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json.Linq;
+using Grimoire.UI;
 
 namespace MaidRemake
 {
@@ -54,6 +54,8 @@ namespace MaidRemake
 
 		bool onPause = false;
 
+		bool forceSkill = false;
+
 		Stopwatch stopwatch = new Stopwatch();
 
 		public MaidRemake()
@@ -61,7 +63,8 @@ namespace MaidRemake
 			InitializeComponent();
 
 			KeyPreview = true;
-			this.KeyDown += new KeyEventHandler(this.hotkey);
+			//this.KeyDown += new KeyEventHandler(this.hotkey);
+			if (Player.IsLoggedIn) cmbGotoUsername.Text = Player.Username;
 			this.Text = $"Maid Remake {Loader.Version}";
 		}
 
@@ -100,8 +103,22 @@ namespace MaidRemake
 				if (cbCopyWalk.Checked)
 					Proxy.Instance.RegisterHandler(CopyWalkHandler);
 
+				Flash.FlashCall += AnimsMsgHandler;
+
 				if (!cbUnfollow.Checked && Player.IsLoggedIn && !World.IsMapLoading && isPlayerInMyRoom && !isPlayerInMyCell)
 					Player.GoToPlayer(targetUsername);
+
+				if (cbAttackPriority.Checked)
+					monsterList = tbAttPriority.Text.Split(',');
+
+				if (cbUseHeal.Checked)
+					healSkill = tbHealSkill.Text.Split(',');
+
+				if (cbBuffIfStop.Checked)
+				{
+					buffSkill = tbBuffSkill.Text.Split(',');
+					buffIndex = 0;
+				}
 
 				while (cbEnablePlugin.Checked)
 				{
@@ -125,6 +142,7 @@ namespace MaidRemake
 								skillIndex = 0;
 								World.SetSpawnPoint();
 								await Task.Delay(500);
+								forceSkill = false;
 								continue;
 							}
 
@@ -162,7 +180,7 @@ namespace MaidRemake
 							}
 
 							if (cbAttackPriority.Checked)
-								doPriorityAttack();
+								doPriorityAttack(); 
 
 							if (World.IsMonsterAvailable("*") && !Player.HasTarget)
 								Player.AttackMonster("*");
@@ -175,7 +193,19 @@ namespace MaidRemake
 
 							if (Player.HasTarget)
 							{
-								Player.UseSkill(skillList[skillIndex]);
+								if (forceSkill)
+								{
+									string skillAct = numSkillAct.Value.ToString();
+									await Task.Delay(1000);
+									await Task.Delay(Player.SkillAvailable(skillAct));
+									Player.UseSkill(skillAct);
+									await Task.Delay(500);
+									Player.UseSkill(skillAct);
+									forceSkill = false;
+								} else
+								{
+									Player.UseSkill(skillList[skillIndex]);
+								}
 							}
 
 							skillIndex++;
@@ -227,6 +257,78 @@ namespace MaidRemake
 			{
 				stopMaid();
 			}
+		}
+
+		private Grimoire.Networking.Message CreateMessage(string raw)
+		{
+			if (raw != null && raw.Length > 0)
+			{
+				switch (raw[0])
+				{
+					case '%':
+						return new XtMessage(raw);
+					case '<':
+						return new XmlMessage(raw);
+					case '{':
+						return new JsonMessage(raw);
+				}
+			}
+
+			return null;
+		}
+
+
+		private void AnimsMsgHandler(AxShockwaveFlashObjects.AxShockwaveFlash flash, string function, params object[] args)
+		{
+			if (function != "packetFromServer") return;
+			try
+			{
+				Grimoire.Networking.Message message = CreateMessage((string)args[0]);
+				JsonMessage jsonMessage = message as JsonMessage;
+				if (jsonMessage != null)
+				{
+					if (jsonMessage.DataObject["anims"] != null)
+					{
+						JArray anims = (JArray)jsonMessage.DataObject["anims"];
+						if (anims != null)
+						{
+							foreach (JObject anim in anims)
+							{
+								string msg = anim?["msg"]?.ToString()?.ToLower();
+								if (msg != null)
+								{
+									//debug($"msg: {msg}");
+									if (tbSpecialMsg.Text.Contains(","))
+									{
+										foreach (string m in tbSpecialMsg.Text.Split(','))
+										{
+											if (msg.Contains(m))
+											{
+												forceSkill = true;
+											}
+										}
+									} 
+									else
+									{
+										if (msg.Contains(tbSpecialMsg.Text))
+										{
+											forceSkill = true;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				debug($"[MAID] e: {e}");
+			}
+		}
+		private void debug(string text)
+		{
+			LogForm.Instance.AppendDebug(text);
 		}
 
 		private async Task waitForFirstJoin()
@@ -286,9 +388,14 @@ namespace MaidRemake
 
 		public void startUI()
 		{
+			tbSpecialMsg.Enabled = false;
+			numSkillAct.Enabled = false;
 			cmbGotoUsername.Enabled = false;
 			tbSkillList.Enabled = false;
 			gbOptions.Enabled = false;
+			cbWaitSkill.Enabled = false;
+			btnMe.Enabled = false;
+			cbCopyWalk.Enabled = false;
 			if (LockedMapForm.Instance.Visible)
 			{
 				if (LockedMapForm.Instance.WindowState == FormWindowState.Minimized)
@@ -309,10 +416,16 @@ namespace MaidRemake
 			Proxy.Instance.UnregisterHandler(CJHandler);
 			Proxy.Instance.UnregisterHandler(JoinMapHandler);
 			Proxy.Instance.UnregisterHandler(CopyWalkHandler);
+			Flash.FlashCall -= AnimsMsgHandler;
 
+			tbSpecialMsg.Enabled = true;
+			numSkillAct.Enabled = true;
 			cmbGotoUsername.Enabled = true;
 			tbSkillList.Enabled = true;
 			gbOptions.Enabled = true;
+			cbWaitSkill.Enabled = true;
+			btnMe.Enabled = true;
+			cbCopyWalk.Enabled = true;
 			cbEnablePlugin.Checked = false;
 			onPause = false;
 		}
@@ -327,7 +440,7 @@ namespace MaidRemake
 			{
 				kbh.OnKeyPressed += globalHotkey;
 				kbh.OnKeyUnpressed += (s, ek) => { };
-				this.KeyDown -= hotkey;
+				//this.KeyDown -= hotkey;
 
 				kbh.HookKeyboard();
 			}
@@ -335,7 +448,7 @@ namespace MaidRemake
 			{
 				kbh.OnKeyPressed -= globalHotkey;
 				kbh.OnKeyUnpressed -= (s, ek) => { };
-				this.KeyDown += new KeyEventHandler(this.hotkey);
+				//this.KeyDown += new KeyEventHandler(this.hotkey);
 
 				kbh.UnHookKeyboard();
 			}
@@ -440,43 +553,30 @@ namespace MaidRemake
 
 		private void cbUseHeal_CheckedChanged(object sender, EventArgs e)
 		{
+			tbHealSkill.Enabled = !cbUseHeal.Checked;
+			numHealthPercent.Enabled = !cbUseHeal.Checked;
 			if (cbUseHeal.Checked)
 			{
-				tbHealSkill.Enabled = false;
-				numHealthPercent.Enabled = false;
 				healSkill = tbHealSkill.Text.Split(',');
-			}
-			else
-			{
-				tbHealSkill.Enabled = true;
-				numHealthPercent.Enabled = true;
 			}
 		}
 
 		private void cbBuffIfStop_CheckedChanged(object sender, EventArgs e)
 		{
-			if(cbBuffIfStop.Checked)
+			cbBuffIfStop.Enabled = !cbBuffIfStop.Checked;
+			if (cbBuffIfStop.Checked)
 			{
-				tbBuffSkill.Enabled = false;
-				buffSkill = MaidRemake.Instance.tbBuffSkill.Text.Split(',');
+				buffSkill = tbBuffSkill.Text.Split(',');
 				buffIndex = 0;
-			}
-			else
-			{
-				tbBuffSkill.Enabled = true;
 			}
 		}
 
 		private void cbAttackPriority_CheckedChanged(object sender, EventArgs e)
 		{
+			tbAttPriority.Enabled = !cbAttackPriority.Checked;
 			if (cbAttackPriority.Checked)
 			{
-				monsterList = MaidRemake.Instance.tbAttPriority.Text.Split(',');
-				tbAttPriority.Enabled = false;
-			}
-			else
-			{
-				tbAttPriority.Enabled = true;
+				monsterList = tbAttPriority.Text.Split(',');
 			}
 		}
 
@@ -567,6 +667,8 @@ namespace MaidRemake
 				AttackPriority = cbAttackPriority.Checked,
 				AttackPriorityMonster = tbAttPriority.Text,
 				CopyWalk = cbCopyWalk.Checked,
+				SpecialMsg = tbSpecialMsg.Text,
+				SpecialAct = (int)numSkillAct.Value,
 			};
 			using (SaveFileDialog saveFileDialog = new SaveFileDialog())
 			{
@@ -581,7 +683,7 @@ namespace MaidRemake
 					{
 						File.WriteAllText(saveFileDialog.FileName, JsonConvert.SerializeObject(maidConfig, Formatting.Indented));
 						string[] path = saveFileDialog.FileName.Split('\\');
-						lblConfigName.Text = $"Config: {path[path.Length-1]}";
+						gbConfig.Text = $"Config : {path[path.Length-1]}";
 					}
 					catch (Exception ex)
 					{
@@ -602,7 +704,7 @@ namespace MaidRemake
 				if (openFileDialog.ShowDialog() == DialogResult.OK && 
 					TryDeserialize(File.ReadAllText(openFileDialog.FileName), out MaidConfig config))
 				{
-					lblConfigName.Text = $"Config: {openFileDialog.SafeFileName}";
+					gbConfig.Text = $"Config : {openFileDialog.SafeFileName}";
 					cmbGotoUsername.Text = config.Target;
 					tbSkillList.Text = config.SkillList;
 					numSkillDelay.Value = config.SkillDelay;
@@ -622,6 +724,8 @@ namespace MaidRemake
 					cbAttackPriority.Checked = config.AttackPriority;
 					tbAttPriority.Text = config.AttackPriorityMonster;
 					cbCopyWalk.Checked = config.CopyWalk;
+					tbSpecialMsg.Text = config.SpecialMsg;
+					numSkillAct.Value = config.SpecialAct;
 				}
 			}
 		}
@@ -668,6 +772,11 @@ namespace MaidRemake
 		public void logDebug(string msg)
 		{
 			Grimoire.UI.LogForm.Instance.AppendDebug($"[MaidRemake] {msg}");
+		}
+
+		private void btnMe_Click(object sender, EventArgs e)
+		{
+			if (Player.IsLoggedIn) cmbGotoUsername.Text = Player.Username;
 		}
 	}
 }

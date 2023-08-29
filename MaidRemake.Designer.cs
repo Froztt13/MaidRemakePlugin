@@ -37,9 +37,6 @@
 			this.gbOptions = new DarkUI.Controls.DarkGroupBox();
 			this.lblWhitelistMap = new System.Windows.Forms.LinkLabel();
 			this.cbWhitelistMap = new DarkUI.Controls.DarkCheckBox();
-			this.lblConfigName = new DarkUI.Controls.DarkLabel();
-			this.btnSave = new DarkUI.Controls.DarkButton();
-			this.btnLoad = new DarkUI.Controls.DarkButton();
 			this.lblLockedMapSetting = new System.Windows.Forms.LinkLabel();
 			this.cbHandleLockedMap = new DarkUI.Controls.DarkCheckBox();
 			this.cmbPreset = new DarkUI.Controls.DarkComboBox();
@@ -47,6 +44,8 @@
 			this.cbStopIf = new DarkUI.Controls.DarkCheckBox();
 			this.label1 = new DarkUI.Controls.DarkLabel();
 			this.numRelogDelay = new DarkUI.Controls.DarkNumericUpDown();
+			this.btnSave = new DarkUI.Controls.DarkButton();
+			this.btnLoad = new DarkUI.Controls.DarkButton();
 			this.cbUnfollow = new DarkUI.Controls.DarkCheckBox();
 			this.cbStopAttack = new DarkUI.Controls.DarkCheckBox();
 			this.cbEnableGlobalHotkey = new DarkUI.Controls.DarkCheckBox();
@@ -69,12 +68,22 @@
 			this.darkLabel1 = new DarkUI.Controls.DarkLabel();
 			this.darkLabel2 = new DarkUI.Controls.DarkLabel();
 			this.gbActivation = new DarkUI.Controls.DarkGroupBox();
+			this.darkLabel3 = new DarkUI.Controls.DarkLabel();
+			this.gbConfig = new DarkUI.Controls.DarkGroupBox();
+			this.tbSpecialMsg = new DarkUI.Controls.DarkTextBox();
+			this.darkGroupBox1 = new DarkUI.Controls.DarkGroupBox();
+			this.numSkillAct = new DarkUI.Controls.DarkNumericUpDown();
+			this.darkLabel4 = new DarkUI.Controls.DarkLabel();
+			this.btnMe = new DarkUI.Controls.DarkButton();
 			this.gbOptions.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numRelogDelay)).BeginInit();
 			this.gbAdvancedOptions.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numHealthPercent)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numSkillDelay)).BeginInit();
 			this.gbActivation.SuspendLayout();
+			this.gbConfig.SuspendLayout();
+			this.darkGroupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numSkillAct)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// trgtUsrnmLabel
@@ -92,7 +101,7 @@
 			// 
 			this.cbEnablePlugin.AutoSize = true;
 			this.cbEnablePlugin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnablePlugin.Location = new System.Drawing.Point(9, 32);
+			this.cbEnablePlugin.Location = new System.Drawing.Point(22, 32);
 			this.cbEnablePlugin.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.cbEnablePlugin.Name = "cbEnablePlugin";
 			this.cbEnablePlugin.Size = new System.Drawing.Size(92, 24);
@@ -125,9 +134,6 @@
 			// 
 			this.gbOptions.Controls.Add(this.lblWhitelistMap);
 			this.gbOptions.Controls.Add(this.cbWhitelistMap);
-			this.gbOptions.Controls.Add(this.lblConfigName);
-			this.gbOptions.Controls.Add(this.btnSave);
-			this.gbOptions.Controls.Add(this.btnLoad);
 			this.gbOptions.Controls.Add(this.lblLockedMapSetting);
 			this.gbOptions.Controls.Add(this.cbHandleLockedMap);
 			this.gbOptions.Controls.Add(this.cmbPreset);
@@ -139,7 +145,7 @@
 			this.gbOptions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.gbOptions.Name = "gbOptions";
 			this.gbOptions.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.gbOptions.Size = new System.Drawing.Size(237, 277);
+			this.gbOptions.Size = new System.Drawing.Size(237, 197);
 			this.gbOptions.TabIndex = 15;
 			this.gbOptions.TabStop = false;
 			this.gbOptions.Text = "Options";
@@ -165,39 +171,6 @@
 			this.cbWhitelistMap.Name = "cbWhitelistMap";
 			this.cbWhitelistMap.Size = new System.Drawing.Size(22, 21);
 			this.cbWhitelistMap.TabIndex = 27;
-			// 
-			// lblConfigName
-			// 
-			this.lblConfigName.AutoSize = true;
-			this.lblConfigName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.lblConfigName.Location = new System.Drawing.Point(14, 203);
-			this.lblConfigName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.lblConfigName.Name = "lblConfigName";
-			this.lblConfigName.Size = new System.Drawing.Size(115, 20);
-			this.lblConfigName.TabIndex = 26;
-			this.lblConfigName.Text = "Config: Default";
-			// 
-			// btnSave
-			// 
-			this.btnSave.Checked = false;
-			this.btnSave.Location = new System.Drawing.Point(123, 228);
-			this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.btnSave.Name = "btnSave";
-			this.btnSave.Size = new System.Drawing.Size(93, 35);
-			this.btnSave.TabIndex = 25;
-			this.btnSave.Text = "Save";
-			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-			// 
-			// btnLoad
-			// 
-			this.btnLoad.Checked = false;
-			this.btnLoad.Location = new System.Drawing.Point(18, 228);
-			this.btnLoad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.btnLoad.Name = "btnLoad";
-			this.btnLoad.Size = new System.Drawing.Size(93, 35);
-			this.btnLoad.TabIndex = 24;
-			this.btnLoad.Text = "Load";
-			this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
 			// 
 			// lblLockedMapSetting
 			// 
@@ -297,6 +270,28 @@
             0,
             0});
 			// 
+			// btnSave
+			// 
+			this.btnSave.Checked = false;
+			this.btnSave.Location = new System.Drawing.Point(128, 29);
+			this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.btnSave.Name = "btnSave";
+			this.btnSave.Size = new System.Drawing.Size(93, 35);
+			this.btnSave.TabIndex = 25;
+			this.btnSave.Text = "Save";
+			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+			// 
+			// btnLoad
+			// 
+			this.btnLoad.Checked = false;
+			this.btnLoad.Location = new System.Drawing.Point(22, 29);
+			this.btnLoad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.btnLoad.Name = "btnLoad";
+			this.btnLoad.Size = new System.Drawing.Size(93, 35);
+			this.btnLoad.TabIndex = 24;
+			this.btnLoad.Text = "Load";
+			this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+			// 
 			// cbUnfollow
 			// 
 			this.cbUnfollow.AutoSize = true;
@@ -347,7 +342,7 @@
 			this.gbAdvancedOptions.Controls.Add(this.cbStopAttack);
 			this.gbAdvancedOptions.Controls.Add(this.cbUnfollow);
 			this.gbAdvancedOptions.Controls.Add(this.lbStopAttackBg);
-			this.gbAdvancedOptions.Location = new System.Drawing.Point(18, 300);
+			this.gbAdvancedOptions.Location = new System.Drawing.Point(18, 342);
 			this.gbAdvancedOptions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.gbAdvancedOptions.Name = "gbAdvancedOptions";
 			this.gbAdvancedOptions.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -484,12 +479,13 @@
 			// cbPartyCmd
 			// 
 			this.cbPartyCmd.AutoSize = true;
-			this.cbPartyCmd.Location = new System.Drawing.Point(112, 32);
+			this.cbPartyCmd.Location = new System.Drawing.Point(124, 32);
 			this.cbPartyCmd.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.cbPartyCmd.Name = "cbPartyCmd";
 			this.cbPartyCmd.Size = new System.Drawing.Size(104, 24);
 			this.cbPartyCmd.TabIndex = 29;
 			this.cbPartyCmd.Text = "PartyCmd";
+			this.cbPartyCmd.Visible = false;
 			this.cbPartyCmd.CheckedChanged += new System.EventHandler(this.cbPartyCmd_CheckedChanged);
 			// 
 			// timerStopAttack
@@ -506,7 +502,7 @@
 			this.cmbGotoUsername.Location = new System.Drawing.Point(28, 43);
 			this.cmbGotoUsername.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.cmbGotoUsername.Name = "cmbGotoUsername";
-			this.cmbGotoUsername.Size = new System.Drawing.Size(200, 28);
+			this.cmbGotoUsername.Size = new System.Drawing.Size(181, 28);
 			this.cmbGotoUsername.TabIndex = 20;
 			this.cmbGotoUsername.Text = "username";
 			this.cmbGotoUsername.Click += new System.EventHandler(this.cmbGotoUsername_Clicked);
@@ -580,16 +576,119 @@
 			this.gbActivation.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.gbActivation.Name = "gbActivation";
 			this.gbActivation.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.gbActivation.Size = new System.Drawing.Size(244, 80);
+			this.gbActivation.Size = new System.Drawing.Size(244, 69);
 			this.gbActivation.TabIndex = 31;
 			this.gbActivation.TabStop = false;
 			this.gbActivation.Text = "Activation";
+			// 
+			// darkLabel3
+			// 
+			this.darkLabel3.AutoSize = true;
+			this.darkLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.darkLabel3.Location = new System.Drawing.Point(12, 32);
+			this.darkLabel3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.darkLabel3.Name = "darkLabel3";
+			this.darkLabel3.Size = new System.Drawing.Size(47, 20);
+			this.darkLabel3.TabIndex = 29;
+			this.darkLabel3.Text = "msg: ";
+			// 
+			// gbConfig
+			// 
+			this.gbConfig.Controls.Add(this.btnLoad);
+			this.gbConfig.Controls.Add(this.btnSave);
+			this.gbConfig.Location = new System.Drawing.Point(18, 257);
+			this.gbConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.gbConfig.Name = "gbConfig";
+			this.gbConfig.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.gbConfig.Size = new System.Drawing.Size(244, 75);
+			this.gbConfig.TabIndex = 32;
+			this.gbConfig.TabStop = false;
+			this.gbConfig.Text = "Config : Default";
+			// 
+			// tbSpecialMsg
+			// 
+			this.tbSpecialMsg.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbSpecialMsg.Location = new System.Drawing.Point(60, 28);
+			this.tbSpecialMsg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.tbSpecialMsg.Name = "tbSpecialMsg";
+			this.tbSpecialMsg.Size = new System.Drawing.Size(167, 27);
+			this.tbSpecialMsg.TabIndex = 33;
+			this.tbSpecialMsg.Text = "converge,truth,resist";
+			// 
+			// darkGroupBox1
+			// 
+			this.darkGroupBox1.Controls.Add(this.numSkillAct);
+			this.darkGroupBox1.Controls.Add(this.darkLabel4);
+			this.darkGroupBox1.Controls.Add(this.darkLabel3);
+			this.darkGroupBox1.Controls.Add(this.tbSpecialMsg);
+			this.darkGroupBox1.Location = new System.Drawing.Point(272, 225);
+			this.darkGroupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.darkGroupBox1.Name = "darkGroupBox1";
+			this.darkGroupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.darkGroupBox1.Size = new System.Drawing.Size(237, 98);
+			this.darkGroupBox1.TabIndex = 32;
+			this.darkGroupBox1.TabStop = false;
+			this.darkGroupBox1.Text = "Special Anims";
+			// 
+			// numSkillAct
+			// 
+			this.numSkillAct.IncrementAlternate = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+			this.numSkillAct.Location = new System.Drawing.Point(157, 62);
+			this.numSkillAct.LoopValues = false;
+			this.numSkillAct.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.numSkillAct.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.numSkillAct.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numSkillAct.Name = "numSkillAct";
+			this.numSkillAct.Size = new System.Drawing.Size(69, 26);
+			this.numSkillAct.TabIndex = 29;
+			this.numSkillAct.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			// 
+			// darkLabel4
+			// 
+			this.darkLabel4.AutoSize = true;
+			this.darkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.darkLabel4.Location = new System.Drawing.Point(12, 66);
+			this.darkLabel4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.darkLabel4.Name = "darkLabel4";
+			this.darkLabel4.Size = new System.Drawing.Size(89, 20);
+			this.darkLabel4.TabIndex = 34;
+			this.darkLabel4.Text = "skill action: ";
+			// 
+			// btnMe
+			// 
+			this.btnMe.Checked = false;
+			this.btnMe.Location = new System.Drawing.Point(218, 43);
+			this.btnMe.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.btnMe.Name = "btnMe";
+			this.btnMe.Size = new System.Drawing.Size(45, 32);
+			this.btnMe.TabIndex = 26;
+			this.btnMe.Text = "me";
+			this.btnMe.Click += new System.EventHandler(this.btnMe_Click);
 			// 
 			// MaidRemake
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(522, 483);
+			this.ClientSize = new System.Drawing.Size(522, 529);
+			this.Controls.Add(this.btnMe);
+			this.Controls.Add(this.darkGroupBox1);
+			this.Controls.Add(this.gbConfig);
 			this.Controls.Add(this.gbActivation);
 			this.Controls.Add(this.darkLabel2);
 			this.Controls.Add(this.darkLabel1);
@@ -618,6 +717,10 @@
 			((System.ComponentModel.ISupportInitialize)(this.numSkillDelay)).EndInit();
 			this.gbActivation.ResumeLayout(false);
 			this.gbActivation.PerformLayout();
+			this.gbConfig.ResumeLayout(false);
+			this.darkGroupBox1.ResumeLayout(false);
+			this.darkGroupBox1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numSkillAct)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -657,11 +760,17 @@
 		public DarkUI.Controls.DarkCheckBox cbCopyWalk;
 		private DarkUI.Controls.DarkButton btnSave;
 		private DarkUI.Controls.DarkButton btnLoad;
-		private DarkUI.Controls.DarkLabel lblConfigName;
 		private DarkUI.Controls.DarkCheckBox cbPartyCmd;
 		private DarkUI.Controls.DarkLabel darkLabel2;
 		private DarkUI.Controls.DarkGroupBox gbActivation;
 		private System.Windows.Forms.LinkLabel lblWhitelistMap;
 		public DarkUI.Controls.DarkCheckBox cbWhitelistMap;
+		private DarkUI.Controls.DarkLabel darkLabel3;
+		private DarkUI.Controls.DarkGroupBox gbConfig;
+		internal DarkUI.Controls.DarkTextBox tbSpecialMsg;
+		private DarkUI.Controls.DarkGroupBox darkGroupBox1;
+		private DarkUI.Controls.DarkLabel darkLabel4;
+		private DarkUI.Controls.DarkButton btnMe;
+		internal DarkUI.Controls.DarkNumericUpDown numSkillAct;
 	}
 }
