@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MaidRemake</RootNamespace>
-    <AssemblyName>MaidRemake_5.4</AssemblyName>
+    <AssemblyName>MaidRemake_5.5</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.ShockwaveFlashObjects">
-      <HintPath>..\Grimlite-Li\Dependency\AxInterop.ShockwaveFlashObjects.dll</HintPath>
+      <HintPath>Dependency\AxInterop.ShockwaveFlashObjects.dll</HintPath>
     </Reference>
     <Reference Include="DarkUI">
       <HintPath>Dependency\DarkUI.dll</HintPath>
@@ -42,9 +42,10 @@
       <HintPath>..\Grimlite-Li-Froztt13\bin\Debug\Grimoire.exe</HintPath>
     </Reference>
     <Reference Include="Interop.ShockwaveFlashObjects">
-      <HintPath>..\Grimlite-Li\Dependency\Interop.ShockwaveFlashObjects.dll</HintPath>
+      <HintPath>Dependency\Interop.ShockwaveFlashObjects.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>

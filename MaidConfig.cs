@@ -45,5 +45,9 @@ namespace MaidRemake
 		public string AttackPriorityMonster;
 
 		public bool CopyWalk;
+
+		public string SpecialMsg;
+
+		public int SpecialAct;
 	}
 }
