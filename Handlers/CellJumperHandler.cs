@@ -48,6 +48,7 @@ namespace MaidRemake.Handlers
 					if (cell != null && pad != null)
 					{
 						Player.MoveToCell(cell, pad);
+						MaidRemake.Instance.resetSpecials();
 					}
 
 					// on whitelisted map

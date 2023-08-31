@@ -65,6 +65,7 @@ namespace MaidRemake
 			KeyPreview = true;
 			//this.KeyDown += new KeyEventHandler(this.hotkey);
 			if (Player.IsLoggedIn) cmbGotoUsername.Text = Player.Username;
+			cmbUltraBoss.SelectedIndex = 0;
 			this.Text = $"Maid Remake {Loader.Version}";
 		}
 
@@ -79,6 +80,7 @@ namespace MaidRemake
 
 		private async void cbEnablePlugin_CheckedChanged(object sender, EventArgs e)
 		{
+			resetSpecials();
 			if (cbEnablePlugin.Checked)
 			{
 				startUI();
@@ -287,7 +289,7 @@ namespace MaidRemake
 				JsonMessage jsonMessage = message as JsonMessage;
 				if (jsonMessage != null)
 				{
-					if (jsonMessage.DataObject["anims"] != null)
+					if (jsonMessage.DataObject?["anims"] != null)
 					{
 						JArray anims = (JArray)jsonMessage.DataObject["anims"];
 						if (anims != null)
@@ -302,7 +304,7 @@ namespace MaidRemake
 									{
 										foreach (string m in tbSpecialMsg.Text.Split(','))
 										{
-											if (msg.Contains(m))
+											if (msg.Contains(m) && ultraBossHandler(msg))
 											{
 												forceSkill = true;
 											}
@@ -310,7 +312,7 @@ namespace MaidRemake
 									} 
 									else
 									{
-										if (msg.Contains(tbSpecialMsg.Text))
+										if (msg.Contains(tbSpecialMsg.Text) && ultraBossHandler(msg))
 										{
 											forceSkill = true;
 										}
@@ -323,12 +325,12 @@ namespace MaidRemake
 			}
 			catch (Exception e)
 			{
-				debug($"[MAID] e: {e}");
+				debug($"e: {e}");
 			}
 		}
 		private void debug(string text)
 		{
-			LogForm.Instance.AppendDebug(text);
+			LogForm.Instance.AppendDebug($"[Maid] {text}");
 		}
 
 		private async Task waitForFirstJoin()
@@ -396,6 +398,7 @@ namespace MaidRemake
 			cbWaitSkill.Enabled = false;
 			btnMe.Enabled = false;
 			cbCopyWalk.Enabled = false;
+			cmbUltraBoss.Enabled = false;
 			if (LockedMapForm.Instance.Visible)
 			{
 				if (LockedMapForm.Instance.WindowState == FormWindowState.Minimized)
@@ -426,8 +429,18 @@ namespace MaidRemake
 			cbWaitSkill.Enabled = true;
 			btnMe.Enabled = true;
 			cbCopyWalk.Enabled = true;
+			cmbUltraBoss.Enabled = true;
 			cbEnablePlugin.Checked = false;
 			onPause = false;
+		}
+
+		public void resetSpecials()
+		{
+			if (Player.Cell != "r3")
+			{
+				sunConvergenceCount = 0;
+				moonConvergenceCount = 0;
+			}
 		}
 
 		/* Hotkey */
@@ -583,6 +596,73 @@ namespace MaidRemake
 		private void timerStopAttack_Tick(object sender, EventArgs e)
 		{
 			this.Text = $"Maid Remake ({string.Format("{0:hh\\:mm\\:ss}", stopwatch.Elapsed)})";
+		}
+
+		private int sunConvergenceCount = 0;
+		private int moonConvergenceCount = 0;
+
+		private bool ultraBossHandler(string msg)
+		{
+			bool act = true;
+			if (msg.Contains("sun converge"))
+				sunConvergenceCount++;
+			if (msg.Contains("moon converge"))
+				moonConvergenceCount++;
+			switch (cmbUltraBoss.SelectedItem.ToString())
+			{
+				case "Asc.Solstice P1":
+					debug($"Sun Converges count: {sunConvergenceCount}");
+					act = Player.GetAuras(true, "Solar Convergence") < 1 && sunConvergenceCount % 2 != 0;
+					break;
+				case "Asc.Solstice P2":
+					debug($"Sun Converges count: {sunConvergenceCount}");
+					act = Player.GetAuras(true, "Solar Convergence") < 1 && sunConvergenceCount % 2 == 0;
+					break;
+				case "Asc.Midnight P1":
+					debug($"Moon Converges count: {moonConvergenceCount}");
+					act = Player.GetAuras(true, "Lunar Convergence") < 1 && moonConvergenceCount % 2 != 0;
+					break;
+				case "Asc.Midnight P2":
+					debug($"Moon Converges count: {moonConvergenceCount}");
+					act = Player.GetAuras(true, "Lunar Convergence") < 1 && moonConvergenceCount % 2 == 0;
+					break;
+			}
+			return act;
+		}
+
+		private void cmbUltraBoss_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			switch (cmbUltraBoss.SelectedItem.ToString())
+			{
+				case "None":
+					tbAttPriority.Enabled = true;
+					tbSpecialMsg.Enabled = true;
+					cbAttackPriority.Enabled = true;
+					numSkillAct.Enabled = true;
+					break;
+				case "Asc.Solstice P1":
+				case "Asc.Solstice P2":
+					tbAttPriority.Text = "Ascended Solstice";
+					tbAttPriority.Enabled = false;
+					tbSpecialMsg.Text = "sun converges";
+					tbSpecialMsg.Enabled = false;
+					cbAttackPriority.Checked= true;
+					cbAttackPriority.Enabled = false;
+					numSkillAct.Value = 5;
+					numSkillAct.Enabled = false;
+					break;
+				case "Asc.Midnight P1":
+				case "Asc.Midnight P2":
+					tbAttPriority.Text = "Ascended Midnight";
+					tbAttPriority.Enabled = false;
+					tbSpecialMsg.Text = "moon converges";
+					tbSpecialMsg.Enabled = false;
+					cbAttackPriority.Checked = true;
+					cbAttackPriority.Enabled = false;
+					numSkillAct.Value = 5;
+					numSkillAct.Enabled = false;
+					break;
+			}
 		}
 
 		private void cmbPreset_SelectedIndexChanged(object sender, EventArgs e)
