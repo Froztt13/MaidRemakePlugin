@@ -49,5 +49,9 @@ namespace MaidRemake
 		public string SpecialMsg;
 
 		public int SpecialAct;
+
+		public bool AntiCounter;
+
+		public int UltraBossExtra;
 	}
 }

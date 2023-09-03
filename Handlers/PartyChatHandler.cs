@@ -1,5 +1,7 @@
 ﻿using Grimoire.Game;
+using Grimoire.Game.Data;
 using Grimoire.Networking;
+using Grimoire.Tools;
 
 namespace MaidRemake.Handlers
 {
@@ -36,6 +38,38 @@ namespace MaidRemake.Handlers
 							if (map.Contains("tercessuinotlim"))
 								Player.MoveToCell("m22", "Left");
 							Player.JoinMap(map, "Enter", "Spawn");
+							break;
+						case ".join":
+							string join = msg.Remove(0, 5);
+							Player.JoinMap(join);
+							break;
+						case ".acc":
+							string qid = msg.Remove(0, 5);
+							if (qid.Contains(","))
+							{
+								foreach (string q in qid.Split(','))
+								{
+									Flash.Call("Accept", q);
+								}
+							} 
+							else
+							{
+								Flash.Call("Accept", qid);
+							}
+							break;
+						case ".turnin":
+							string qidt = msg.Remove(0, 8);
+							if (qidt.Contains(","))
+							{
+								foreach (string q in qidt.Split(','))
+								{
+									Flash.Call("Complete", q);
+								}
+							}
+							else
+							{
+								Flash.Call("Complete", qidt);
+							}
 							break;
 						case ".target":
 							MaidRemake.Instance.cmbGotoUsername.Text = msg.Remove(0, 8);

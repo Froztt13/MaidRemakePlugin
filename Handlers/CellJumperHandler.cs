@@ -30,6 +30,8 @@ namespace MaidRemake.Handlers
 
 			try
 			{
+				MaidRemake.Instance.resetSpecials();
+
 				// current Username
 				string currUsername = message.Arguments[4].ToLower();
 
@@ -48,7 +50,6 @@ namespace MaidRemake.Handlers
 					if (cell != null && pad != null)
 					{
 						Player.MoveToCell(cell, pad);
-						MaidRemake.Instance.resetSpecials();
 					}
 
 					// on whitelisted map
