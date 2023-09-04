@@ -30,6 +30,8 @@ namespace MaidRemake.Handlers
 
 			try
 			{
+				MaidRemake.Instance.resetSpecials();
+
 				// current Username
 				string currUsername = message.Arguments[4].ToLower();
 

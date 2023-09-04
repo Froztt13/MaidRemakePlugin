@@ -65,6 +65,7 @@ namespace MaidRemake
 			KeyPreview = true;
 			//this.KeyDown += new KeyEventHandler(this.hotkey);
 			if (Player.IsLoggedIn) cmbGotoUsername.Text = Player.Username;
+			cmbUltraBoss.SelectedIndex = 0;
 			this.Text = $"Maid Remake {Loader.Version}";
 		}
 
@@ -79,6 +80,7 @@ namespace MaidRemake
 
 		private async void cbEnablePlugin_CheckedChanged(object sender, EventArgs e)
 		{
+			resetSpecials();
 			if (cbEnablePlugin.Checked)
 			{
 				startUI();
@@ -287,7 +289,7 @@ namespace MaidRemake
 				JsonMessage jsonMessage = message as JsonMessage;
 				if (jsonMessage != null)
 				{
-					if (jsonMessage.DataObject["anims"] != null)
+					if (jsonMessage.DataObject?["anims"] != null)
 					{
 						JArray anims = (JArray)jsonMessage.DataObject["anims"];
 						if (anims != null)
@@ -302,17 +304,19 @@ namespace MaidRemake
 									{
 										foreach (string m in tbSpecialMsg.Text.Split(','))
 										{
-											if (msg.Contains(m))
+											if (msg.Contains(m) && ultraBossHandler(msg))
 											{
 												forceSkill = true;
+												return;
 											}
 										}
 									} 
 									else
 									{
-										if (msg.Contains(tbSpecialMsg.Text))
+										if (msg.Contains(tbSpecialMsg.Text) && ultraBossHandler(msg))
 										{
 											forceSkill = true;
+											return;
 										}
 									}
 								}
@@ -323,12 +327,71 @@ namespace MaidRemake
 			}
 			catch (Exception e)
 			{
-				debug($"[MAID] e: {e}");
+				debug($"e: {e}");
 			}
 		}
+
+		private bool counterAttack = false;
+
+		private void AntiCounterHandler(AxShockwaveFlashObjects.AxShockwaveFlash flash, string function, params object[] args)
+		{
+			if (function != "packetFromServer") return;
+			try
+			{
+				Grimoire.Networking.Message message = CreateMessage((string)args[0]);
+				JsonMessage jsonMessage = message as JsonMessage;
+				if (jsonMessage != null)
+				{
+					if (jsonMessage.DataObject?["anims"] != null)
+					{
+						JArray anims = (JArray)jsonMessage.DataObject["anims"];
+						if (anims != null)
+						{
+							foreach (JObject anim in anims)
+							{
+								string msg = anim?["msg"]?.ToString()?.ToLower();
+								if (msg != null)
+								{
+									if (msg.Contains("prepares a counter attack"))
+									{
+										//debug("Counter Attack: active");
+										counterAttack = true;
+										cbStopAttack.Checked = true;
+									}
+								}
+							}
+						}
+					}
+					if (jsonMessage.DataObject?["a"] != null)
+					{
+						JArray a = (JArray)jsonMessage.DataObject?["a"];
+						if (a != null)
+						{
+							cbStopAttack.Checked = Player.GetAuras(true, "Sun's Heat") > 0 || counterAttack;
+							foreach (JObject aura in a)
+							{
+								JObject aura2 = (JObject)aura["aura"];
+								if (aura2?["nam"]?.ToString() == "Counter Attack" && aura.GetValue("cmd")?.ToString() == "aura--")
+								{
+									counterAttack = false;
+									cbStopAttack.Checked = false;
+									//debug("Counter Attack: fades");
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				debug($"e: {e}");
+			}
+		}
+
 		private void debug(string text)
 		{
-			LogForm.Instance.AppendDebug(text);
+			LogForm.Instance.AppendDebug($"[Maid] {text}");
 		}
 
 		private async Task waitForFirstJoin()
@@ -396,6 +459,7 @@ namespace MaidRemake
 			cbWaitSkill.Enabled = false;
 			btnMe.Enabled = false;
 			cbCopyWalk.Enabled = false;
+			cmbUltraBoss.Enabled = false;
 			if (LockedMapForm.Instance.Visible)
 			{
 				if (LockedMapForm.Instance.WindowState == FormWindowState.Minimized)
@@ -426,8 +490,18 @@ namespace MaidRemake
 			cbWaitSkill.Enabled = true;
 			btnMe.Enabled = true;
 			cbCopyWalk.Enabled = true;
+			cmbUltraBoss.Enabled = true;
 			cbEnablePlugin.Checked = false;
 			onPause = false;
+		}
+
+		public void resetSpecials()
+		{
+			if (Player.Map == "ascendeclipse" && Player.Cell != "r3")
+			{
+				sunConvergenceCount = 0;
+				moonConvergenceCount = 0;
+			}
 		}
 
 		/* Hotkey */
@@ -563,7 +637,7 @@ namespace MaidRemake
 
 		private void cbBuffIfStop_CheckedChanged(object sender, EventArgs e)
 		{
-			cbBuffIfStop.Enabled = !cbBuffIfStop.Checked;
+			tbBuffSkill.Enabled = !cbBuffIfStop.Checked;
 			if (cbBuffIfStop.Checked)
 			{
 				buffSkill = tbBuffSkill.Text.Split(',');
@@ -583,6 +657,66 @@ namespace MaidRemake
 		private void timerStopAttack_Tick(object sender, EventArgs e)
 		{
 			this.Text = $"Maid Remake ({string.Format("{0:hh\\:mm\\:ss}", stopwatch.Elapsed)})";
+		}
+
+		private int sunConvergenceCount = 0;
+		private int moonConvergenceCount = 0;
+
+		private bool ultraBossHandler(string msg)
+		{
+			bool act = true;
+			if (msg.Contains("sun converge"))
+			{
+				sunConvergenceCount++;
+				debug($"Sun Converges count: {sunConvergenceCount}");
+			}
+			if (msg.Contains("moon converge"))
+			{
+				moonConvergenceCount++;
+				debug($"Moon Converges count: {moonConvergenceCount}");
+			}
+			switch (cmbUltraBoss.SelectedItem.ToString())
+			{
+				case "Asc.Solstice P1":
+					act = sunConvergenceCount % 2 != 0 || !msg.Contains("sun converge");
+					break;
+				case "Asc.Solstice P2":
+					act = sunConvergenceCount % 2 == 0 || !msg.Contains("sun converge");
+					break;
+				case "Asc.Midnight P1":
+					act = moonConvergenceCount % 2 != 0 || !msg.Contains("moon converge");
+					break;
+				case "Asc.Midnight P2":
+					act = moonConvergenceCount % 2 == 0 || !msg.Contains("moon converge");
+					break;
+			}
+			return act;
+		}
+
+		private void cmbUltraBoss_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			switch (cmbUltraBoss.SelectedItem.ToString())
+			{
+				case "None":
+					tbSpecialMsg.Enabled = true;
+					cbAttackPriority.Enabled = true;
+					numSkillAct.Enabled = true;
+					break;
+				case "Asc.Solstice P1":
+				case "Asc.Solstice P2":
+					cbAttackPriority.Checked = true;
+					tbAttPriority.Text = "Ascended Solstice";
+					tbSpecialMsg.Text = "sun converges";
+					numSkillAct.Value = 5;
+					break;
+				case "Asc.Midnight P1":
+				case "Asc.Midnight P2":
+					cbAttackPriority.Checked = true;
+					tbAttPriority.Text = "Ascended Midnight";
+					tbSpecialMsg.Text = "moon converges";
+					numSkillAct.Value = 5;
+					break;
+			}
 		}
 
 		private void cmbPreset_SelectedIndexChanged(object sender, EventArgs e)
@@ -669,6 +803,8 @@ namespace MaidRemake
 				CopyWalk = cbCopyWalk.Checked,
 				SpecialMsg = tbSpecialMsg.Text,
 				SpecialAct = (int)numSkillAct.Value,
+				AntiCounter = cbAntiCounter.Checked,
+				UltraBossExtra = cmbUltraBoss.SelectedIndex,
 			};
 			using (SaveFileDialog saveFileDialog = new SaveFileDialog())
 			{
@@ -705,6 +841,7 @@ namespace MaidRemake
 					TryDeserialize(File.ReadAllText(openFileDialog.FileName), out MaidConfig config))
 				{
 					gbConfig.Text = $"Config : {openFileDialog.SafeFileName}";
+					cmbUltraBoss.SelectedIndex = config.UltraBossExtra;
 					cmbGotoUsername.Text = config.Target;
 					tbSkillList.Text = config.SkillList;
 					numSkillDelay.Value = config.SkillDelay;
@@ -726,6 +863,7 @@ namespace MaidRemake
 					cbCopyWalk.Checked = config.CopyWalk;
 					tbSpecialMsg.Text = config.SpecialMsg;
 					numSkillAct.Value = config.SpecialAct;
+					cbAntiCounter.Checked = config.AntiCounter;
 				}
 			}
 		}
@@ -777,6 +915,17 @@ namespace MaidRemake
 		private void btnMe_Click(object sender, EventArgs e)
 		{
 			if (Player.IsLoggedIn) cmbGotoUsername.Text = Player.Username;
+		}
+
+		private void cbAntiCounter_CheckedChanged(object sender, EventArgs e)
+		{
+			if (cbAntiCounter.Checked)
+			{
+				Flash.FlashCall += AntiCounterHandler;
+			} else
+			{
+				Flash.FlashCall -= AntiCounterHandler;
+			}
 		}
 	}
 }

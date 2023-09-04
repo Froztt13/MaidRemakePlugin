@@ -35,6 +35,8 @@
 			this.tbSkillList = new DarkUI.Controls.DarkTextBox();
 			this.label4 = new DarkUI.Controls.DarkLabel();
 			this.gbOptions = new DarkUI.Controls.DarkGroupBox();
+			this.darkLabel5 = new DarkUI.Controls.DarkLabel();
+			this.cmbUltraBoss = new DarkUI.Controls.DarkComboBox();
 			this.lblWhitelistMap = new System.Windows.Forms.LinkLabel();
 			this.cbWhitelistMap = new DarkUI.Controls.DarkCheckBox();
 			this.lblLockedMapSetting = new System.Windows.Forms.LinkLabel();
@@ -75,6 +77,7 @@
 			this.numSkillAct = new DarkUI.Controls.DarkNumericUpDown();
 			this.darkLabel4 = new DarkUI.Controls.DarkLabel();
 			this.btnMe = new DarkUI.Controls.DarkButton();
+			this.cbAntiCounter = new DarkUI.Controls.DarkCheckBox();
 			this.gbOptions.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numRelogDelay)).BeginInit();
 			this.gbAdvancedOptions.SuspendLayout();
@@ -132,6 +135,8 @@
 			// 
 			// gbOptions
 			// 
+			this.gbOptions.Controls.Add(this.darkLabel5);
+			this.gbOptions.Controls.Add(this.cmbUltraBoss);
 			this.gbOptions.Controls.Add(this.lblWhitelistMap);
 			this.gbOptions.Controls.Add(this.cbWhitelistMap);
 			this.gbOptions.Controls.Add(this.lblLockedMapSetting);
@@ -145,10 +150,37 @@
 			this.gbOptions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.gbOptions.Name = "gbOptions";
 			this.gbOptions.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.gbOptions.Size = new System.Drawing.Size(237, 197);
+			this.gbOptions.Size = new System.Drawing.Size(237, 262);
 			this.gbOptions.TabIndex = 15;
 			this.gbOptions.TabStop = false;
 			this.gbOptions.Text = "Options";
+			// 
+			// darkLabel5
+			// 
+			this.darkLabel5.AutoSize = true;
+			this.darkLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.darkLabel5.Location = new System.Drawing.Point(12, 197);
+			this.darkLabel5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.darkLabel5.Name = "darkLabel5";
+			this.darkLabel5.Size = new System.Drawing.Size(147, 20);
+			this.darkLabel5.TabIndex = 30;
+			this.darkLabel5.Text = "Ultra Boss w/ Extra:";
+			// 
+			// cmbUltraBoss
+			// 
+			this.cmbUltraBoss.FormattingEnabled = true;
+			this.cmbUltraBoss.Items.AddRange(new object[] {
+            "None",
+            "Asc.Solstice P1",
+            "Asc.Solstice P2",
+            "Asc.Midnight P1",
+            "Asc.Midnight P2"});
+			this.cmbUltraBoss.Location = new System.Drawing.Point(18, 220);
+			this.cmbUltraBoss.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.cmbUltraBoss.Name = "cmbUltraBoss";
+			this.cmbUltraBoss.Size = new System.Drawing.Size(208, 27);
+			this.cmbUltraBoss.TabIndex = 29;
+			this.cmbUltraBoss.SelectedIndexChanged += new System.EventHandler(this.cmbUltraBoss_SelectedIndexChanged);
 			// 
 			// lblWhitelistMap
 			// 
@@ -284,7 +316,7 @@
 			// btnLoad
 			// 
 			this.btnLoad.Checked = false;
-			this.btnLoad.Location = new System.Drawing.Point(22, 29);
+			this.btnLoad.Location = new System.Drawing.Point(16, 29);
 			this.btnLoad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btnLoad.Name = "btnLoad";
 			this.btnLoad.Size = new System.Drawing.Size(93, 35);
@@ -329,6 +361,7 @@
 			// 
 			// gbAdvancedOptions
 			// 
+			this.gbAdvancedOptions.Controls.Add(this.cbAntiCounter);
 			this.gbAdvancedOptions.Controls.Add(this.cbCopyWalk);
 			this.gbAdvancedOptions.Controls.Add(this.numHealthPercent);
 			this.gbAdvancedOptions.Controls.Add(this.lbUseHeal2);
@@ -342,11 +375,11 @@
 			this.gbAdvancedOptions.Controls.Add(this.cbStopAttack);
 			this.gbAdvancedOptions.Controls.Add(this.cbUnfollow);
 			this.gbAdvancedOptions.Controls.Add(this.lbStopAttackBg);
-			this.gbAdvancedOptions.Location = new System.Drawing.Point(18, 342);
+			this.gbAdvancedOptions.Location = new System.Drawing.Point(18, 374);
 			this.gbAdvancedOptions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.gbAdvancedOptions.Name = "gbAdvancedOptions";
 			this.gbAdvancedOptions.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.gbAdvancedOptions.Size = new System.Drawing.Size(490, 172);
+			this.gbAdvancedOptions.Size = new System.Drawing.Size(490, 173);
 			this.gbAdvancedOptions.TabIndex = 19;
 			this.gbAdvancedOptions.TabStop = false;
 			this.gbAdvancedOptions.Text = "Advanced Options";
@@ -354,7 +387,7 @@
 			// cbCopyWalk
 			// 
 			this.cbCopyWalk.AutoSize = true;
-			this.cbCopyWalk.Location = new System.Drawing.Point(10, 135);
+			this.cbCopyWalk.Location = new System.Drawing.Point(357, 100);
 			this.cbCopyWalk.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.cbCopyWalk.Name = "cbCopyWalk";
 			this.cbCopyWalk.Size = new System.Drawing.Size(110, 24);
@@ -428,7 +461,7 @@
 			this.tbAttPriority.Location = new System.Drawing.Point(147, 98);
 			this.tbAttPriority.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.tbAttPriority.Name = "tbAttPriority";
-			this.tbAttPriority.Size = new System.Drawing.Size(326, 27);
+			this.tbAttPriority.Size = new System.Drawing.Size(190, 27);
 			this.tbAttPriority.TabIndex = 23;
 			this.tbAttPriority.Text = "Defense Drone,Attack Drone";
 			// 
@@ -485,7 +518,6 @@
 			this.cbPartyCmd.Size = new System.Drawing.Size(104, 24);
 			this.cbPartyCmd.TabIndex = 29;
 			this.cbPartyCmd.Text = "PartyCmd";
-			this.cbPartyCmd.Visible = false;
 			this.cbPartyCmd.CheckedChanged += new System.EventHandler(this.cbPartyCmd_CheckedChanged);
 			// 
 			// timerStopAttack
@@ -572,11 +604,11 @@
 			// 
 			this.gbActivation.Controls.Add(this.cbPartyCmd);
 			this.gbActivation.Controls.Add(this.cbEnablePlugin);
-			this.gbActivation.Location = new System.Drawing.Point(18, 182);
+			this.gbActivation.Location = new System.Drawing.Point(18, 295);
 			this.gbActivation.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.gbActivation.Name = "gbActivation";
 			this.gbActivation.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.gbActivation.Size = new System.Drawing.Size(244, 69);
+			this.gbActivation.Size = new System.Drawing.Size(237, 69);
 			this.gbActivation.TabIndex = 31;
 			this.gbActivation.TabStop = false;
 			this.gbActivation.Text = "Activation";
@@ -596,11 +628,11 @@
 			// 
 			this.gbConfig.Controls.Add(this.btnLoad);
 			this.gbConfig.Controls.Add(this.btnSave);
-			this.gbConfig.Location = new System.Drawing.Point(18, 257);
+			this.gbConfig.Location = new System.Drawing.Point(272, 289);
 			this.gbConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.gbConfig.Name = "gbConfig";
 			this.gbConfig.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.gbConfig.Size = new System.Drawing.Size(244, 75);
+			this.gbConfig.Size = new System.Drawing.Size(237, 75);
 			this.gbConfig.TabIndex = 32;
 			this.gbConfig.TabStop = false;
 			this.gbConfig.Text = "Config : Default";
@@ -621,7 +653,7 @@
 			this.darkGroupBox1.Controls.Add(this.darkLabel4);
 			this.darkGroupBox1.Controls.Add(this.darkLabel3);
 			this.darkGroupBox1.Controls.Add(this.tbSpecialMsg);
-			this.darkGroupBox1.Location = new System.Drawing.Point(272, 225);
+			this.darkGroupBox1.Location = new System.Drawing.Point(18, 185);
 			this.darkGroupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.darkGroupBox1.Name = "darkGroupBox1";
 			this.darkGroupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -637,7 +669,7 @@
             0,
             0,
             65536});
-			this.numSkillAct.Location = new System.Drawing.Point(157, 62);
+			this.numSkillAct.Location = new System.Drawing.Point(158, 62);
 			this.numSkillAct.LoopValues = false;
 			this.numSkillAct.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.numSkillAct.Maximum = new decimal(new int[] {
@@ -681,11 +713,22 @@
 			this.btnMe.Text = "me";
 			this.btnMe.Click += new System.EventHandler(this.btnMe_Click);
 			// 
+			// cbAntiCounter
+			// 
+			this.cbAntiCounter.AutoSize = true;
+			this.cbAntiCounter.Location = new System.Drawing.Point(10, 137);
+			this.cbAntiCounter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.cbAntiCounter.Name = "cbAntiCounter";
+			this.cbAntiCounter.Size = new System.Drawing.Size(124, 24);
+			this.cbAntiCounter.TabIndex = 29;
+			this.cbAntiCounter.Text = "Anti Counter";
+			this.cbAntiCounter.CheckedChanged += new System.EventHandler(this.cbAntiCounter_CheckedChanged);
+			// 
 			// MaidRemake
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(522, 529);
+			this.ClientSize = new System.Drawing.Size(522, 561);
 			this.Controls.Add(this.btnMe);
 			this.Controls.Add(this.darkGroupBox1);
 			this.Controls.Add(this.gbConfig);
@@ -772,5 +815,8 @@
 		private DarkUI.Controls.DarkLabel darkLabel4;
 		private DarkUI.Controls.DarkButton btnMe;
 		internal DarkUI.Controls.DarkNumericUpDown numSkillAct;
+		private DarkUI.Controls.DarkLabel darkLabel5;
+		private DarkUI.Controls.DarkComboBox cmbUltraBoss;
+		public DarkUI.Controls.DarkCheckBox cbAntiCounter;
 	}
 }
