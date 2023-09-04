@@ -637,7 +637,7 @@ namespace MaidRemake
 
 		private void cbBuffIfStop_CheckedChanged(object sender, EventArgs e)
 		{
-			cbBuffIfStop.Enabled = !cbBuffIfStop.Checked;
+			tbBuffSkill.Enabled = !cbBuffIfStop.Checked;
 			if (cbBuffIfStop.Checked)
 			{
 				buffSkill = tbBuffSkill.Text.Split(',');
@@ -678,16 +678,16 @@ namespace MaidRemake
 			switch (cmbUltraBoss.SelectedItem.ToString())
 			{
 				case "Asc.Solstice P1":
-					act = Player.GetAuras(true, "Solar Convergence") < 1 && sunConvergenceCount % 2 != 0 || !msg.Contains("sun converge");
+					act = sunConvergenceCount % 2 != 0 || !msg.Contains("sun converge");
 					break;
 				case "Asc.Solstice P2":
-					act = Player.GetAuras(true, "Solar Convergence") < 1 && sunConvergenceCount % 2 == 0 || !msg.Contains("sun converge");
+					act = sunConvergenceCount % 2 == 0 || !msg.Contains("sun converge");
 					break;
 				case "Asc.Midnight P1":
-					act = Player.GetAuras(true, "Lunar Convergence") < 1 && moonConvergenceCount % 2 != 0 || !msg.Contains("moon converge");
+					act = moonConvergenceCount % 2 != 0 || !msg.Contains("moon converge");
 					break;
 				case "Asc.Midnight P2":
-					act = Player.GetAuras(true, "Lunar Convergence") < 1 && moonConvergenceCount % 2 == 0 || !msg.Contains("moon converge");
+					act = moonConvergenceCount % 2 == 0 || !msg.Contains("moon converge");
 					break;
 			}
 			return act;
